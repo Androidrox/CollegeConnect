@@ -1,2 +1,0 @@
-# CollegeConnect
-Class Project
