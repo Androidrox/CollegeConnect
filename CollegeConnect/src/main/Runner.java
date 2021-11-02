@@ -3,29 +3,30 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Runner {
+	
+	private static int loggedIn = -1;
 	public static void main(String[] args) {
-		
-		
+
+
 		Scanner input = new Scanner(System.in);
 		//the loggedIn integer is set to -1 as arrays have an index at 0.  
-		int loggedIn = -1;
-		ArrayList<Person> profiles = FileIO.getProfiles();
+	
 		ArrayList<Club> clubs = FileIO.getClubs();
-		
+
 		//asks user is they have an existing file.  if not, they can make one and then sign in.  If they do, then it skips to sign in.
 		System.out.println("Do you have an account? (y/n)");
 		String hasAccount = input.nextLine();
 		if(hasAccount == "n") {
 			createProfile();
 		}
-			
+
 		//This while loop runs the logIn() method and stops looping if the returned index is greater than -1.
 		while(loggedIn < 0) {
-		loggedIn = logIn(profiles);
+			loggedIn = logIn();
 			if(loggedIn < 0)
 				System.out.println("Incorrect Username or Password!/n");
 		}
-		
+
 		int choice = 0;
 		//this while loop will continue to loop through the main method until you input a valid variable.  Entering 5 terminates the program.
 		while(choice != 5) {
@@ -34,17 +35,21 @@ public class Runner {
 			if(choice > 0 && choice < 5) {
 				switch(choice) {
 				case 1:
-					matchPeople(profiles.get(loggedIn));
+					Person match = matchPeople(FileIO.getProfiles().get(loggedIn));
+					createMatch(FileIO.getProfiles().get(loggedIn),match);
+					File.IO.sendMessage(FileIO.getProfiles().get(loggedIn), match, privateMessage(match));
 					break;
 				case 2:
-					editInformation(profiles.get(loggedIn));
+					editInformation(FileIO.getProfiles().get(loggedIn));
 					break;
 				case 3:
 					findClub(clubs);
 					break;
 				case 4:
-					deleteProfile(profiles.get(loggedIn));
+					deleteProfile(FileIO.getProfiles().get(loggedIn));
 					break;
+				case 5:
+					privateMessage();
 				}
 			}
 			else if(choice == 5) {
@@ -54,35 +59,79 @@ public class Runner {
 				System.out.println("Incorrect Input.  Try again!");
 			}
 		}
-		
-		
+
+
 		input.close();
 	}
-	
-	public static void matchPeople(Person profile){
-		
-		//ran out of time, will finish Sunday or Monday	
-		
-		
-		
+
+	public static Person matchPeople(Person profile){
+		Scanner scan = new Scanner(System.in);
+		int input = -1;
+		String choice = "";
+
+		ArrayList<String> tempArray = new ArrayList<String>();
+		while(input != 0) {
+			System.out.println("Here are all eligible profiles:  ");
+			for(int i = 0; i < FileIO.getProfiles().size(); i++) {
+				if(FileIO.getProfiles().get(i).getGender().equals(profile.getGender()))
+					tempArray.add(FileIO.getProfiles().get(i).getName());
+			}
+			for(int i = 0; i < tempArray.size(); i++) {
+				System.out.println(i + 1 + ".  " + tempArray.get(i));
+			}
+			System.out.println("Enter the number you'd wish to look at.  Enter 0 to exit.");
+			input = scan.nextInt();
+			scan.nextLine();
+			//this if statement determines that the value the user inputed fits the indexs of the arraylist
+			if(input > 0 && input < tempArray.size()+1) {
+				System.out.println("Name:  " + tempArray.get(input-1).getName());
+				System.out.println("Age:  " + tempArray.get(input-1).getAge());
+				System.out.println("Gender:  " + tempArray.get(input-1).getGender());
+				System.out.println("Major:  " + tempArray.get(input-1).getMajor());
+				System.out.println("Email:  " + tempArray.get(input-1).getEmail());
+				System.out.println("Hobbies:  " + tempArray.get(input-1).getHobbies());
+				System.out.println("Peeves:  " + tempArray.get(input-1).getPetPeeves());
+				System.out.println("Roommate Preferences:  " + tempArray.get(input-1).getRoomatePreferences());
+				System.out.println("Roomate Dislikes:  " + tempArray.get(input-1).getRoomateDislikes());
+				System.out.println("Would you like to match with this person?  (y/n)");
+				choice = scan.nextLine();
+				if(choice.equals("y")) {
+					break;
+				}
+			}
+			else
+			{
+				System.out.println("Not a valid input.  Try again.");
+			}
+
+		}
+		if(input == 0)
+			return null;
+		else
+		{
+			for(int i = 0; i < FileIO.getProfiles().size(); i++) {
+				if(tempArray.get(input-1).getName().equals(FileIO.getProfiles().get(i).getName()))
+					return FileIO.getProfiles().get(i);
+			}
+		}
 	}
-	
-	
-	
-	
+
+
+
+
 	/*This method takes the ArrayList of person objects from the FileIO class and asks for the User to enter a username or password
 	Then method then scans through each person object to see if a username and password match the inputed Strings
 	If they do, the method returns the index of the profile logged in as the integer "loggedIn"
 	 */
-	public static int logIn(ArrayList<Person> profiles) {
+	public static int logIn() {
 		Scanner input = new Scanner(System.in);
 		System.out.print("Enter your Username:  ");
 		String username = input.nextLine();
 		System.out.println("Enter your Password:  ");
 		String password = input.nextLine();
 		int index;
-		for(int i = 0; i < profiles.size(); i++) {
-			if(username.equals(profiles.get(i).getUsername()) && (password.equals(profiles.get(i).getPassword()))){
+		for(int i = 0; i < FileIO.getProfiles().size(); i++) {
+			if(username.equals(FileIO.getProfiles().get(i).getUsername()) && (password.equals(FileIO.getProfiles().get(i).getPassword()))){
 				index = i;
 			}
 		}
@@ -91,7 +140,7 @@ public class Runner {
 	}
 	//prints off options for user to interact with.
 	public static void mainMenu() {
-		
+
 		System.out.println("\nWelcome!");
 		System.out.println("1.  Find Roommate");
 		System.out.println("2.  Edit Information");
@@ -99,10 +148,10 @@ public class Runner {
 		System.out.println("4.  Delete Profile");
 		System.out.println("5.  Exit");
 		System.out.println("Please enter the corresponding number with what you'd like to do:  ");
-		
-		
+
+
 	}
-	
+
 	//this method allows the user to edit profile information
 	public static void editInformation(Person profile) {
 		Scanner input = new Scanner(System.in);
@@ -118,7 +167,7 @@ public class Runner {
 		System.out.println("8.  Roommate Preferences");
 		System.out.println("9.  Roommate Dislikes");
 		System.out.println("10.  Dorm Choices");
-		
+
 		//this switch takes the users input and runs a block of code to list what a current value is, and then gives you the option to change it
 		switch(choice) {
 		case 1:  
@@ -178,70 +227,78 @@ public class Runner {
 		case 10:
 			System.out.print("Current Dorm choices are:  ");
 			//should this arraylist be casted as a <Dorm> arraylist?  doesn't work if I do that.
-			ArrayList dorms = profile.getDormChoices();
+			ArrayList<Dorms> dorms = profile.getDormChoices();
 			for(int i = 0; i < dorms.size(); i++) {
 				if(i == dorms.size()-1)
-				System.out.println(dorms.get(i));
+					System.out.println(dorms.get(i));
 				else
-				System.out.println(dorms.get(i) + ", ");
-				
+					System.out.println(dorms.get(i) + ", ");
+
 			}
 			System.out.print("(Enter one dorm name at a time)/nChange dorms to:  ");
 			String dorm = input.nextLine();
 			//temporary solution for now, still don't know what to do for arrayList casting here
 			//I need to input the user inputed string into the arrayList at index i, however since its an enum without an assigned string I literally can't
 			for(int i = 0; i < 3; i ++) {
-				dorms.set(i,dorm);
+				while(true) {
+					try {
+						dorms.set(i,Enum.valueOf(Dorms.class, name));
+					} catch(Exception e) {
+						System.out.print("Error.  Not a valid option.");
+						continue;
+					}
+					break;
+				}
 				dorm = input.nextLine();
 			}
-			break;
+
 		}
 		input.close();
 	}
-	
+
 	//this method will allow the user to remove their profile, then terminate program
 	public static void deleteProfile(Person profile) {
 		FileIO.deleteProfile(profile);
 		System.out.println("Account Deleted!");
 		System.exit(0);
 	}
-	
+
 	//for now this just checks for one keyword, can change it to check for more later
-	public static void findClub(ArrayList<Club> clubs) {
+	public static void findClub() {
 		//makes a temporary club ArrayList and then adds any clubs with the keyword the user enters into that arrayList
 		ArrayList<Club> tempClubs = new ArrayList<Club>();
 		Scanner input = new Scanner(System.in);
 		System.out.println("Enter a Keyword in the club you're looking for!");
 		String keyWord = input.nextLine();
-		for(int i = 0; i < clubs.size(); i++) {
-			if(clubs.get(i).hasKeyword(keyWord))
-				tempClubs.add(clubs.get(i));
+		for(int i = 0; i < FileIO.getClubs().size(); i++) {
+			if(FileIO.getClubs().get(i).hasKeyword(keyWord))
+				tempClubs.add(FileIO.getClubs().get(i));
 		}
 		//prints out all clubs with the keyword the user entered, and then allows the user to pick which club to look at in detail
 		System.out.println("Here are all the clubs with your keyword!  Enter the value of the club you'd like to look into.");
 		for(int i = 0; i < tempClubs.size(); i++) {
 			System.out.println((i+1) + ".  " + tempClubs.get(i).getName());
 		}
-		int choice = input.nextInt();
+		int choice = input.nextInt()-1;
 		if(choice < tempClubs.size() && choice > 0) {
-			System.out.println("Club name:  " + tempClubs.get(choice-1).getName() + "\n");
-			System.out.println("Club Description:  " + tempClubs.get(choice-1).getDescription() + "\n");
-			System.out.println("Number of members:  " + tempClubs.get(choice-1).getNumMembers() + "\n");
-			System.out.println("Fees:  $" + tempClubs.get(choice-1).getFees() + "\n");
-			System.out.println("Location:  " + tempClubs.get(choice-1).getLocation() + "\n");
-			System.out.println("Meeting Time:  " + tempClubs.get(choice-1).getMeetingTime() + "\n");
-			System.out.println("Club President:  " + tempClubs.get(choice-1).getPresident() + "\n");
-			System.out.println("Presidents Email:  " + tempClubs.get(choice-1).getPresEmail() + "\n");
-			System.out.println("Presidents Phone Number:  " + tempClubs.get(choice-1).getPresPhone() + "\n");		
+			System.out.println("Club name:  " + tempClubs.get(choice).getName() + "\n");
+			System.out.println("Club Description:  " + tempClubs.get(choice).getDescription() + "\n");
+			System.out.println("Number of members:  " + tempClubs.get(choice).getNumMembers() + "\n");
+			System.out.println("Fees:  $" + tempClubs.get(choice).getFees() + "\n");
+			System.out.println("Location:  " + tempClubs.get(choice).getLocation() + "\n");
+			System.out.println("Meeting Time:  " + tempClubs.get(choice).getMeetingTime() + "\n");
+			System.out.println("Club President:  " + tempClubs.get(choice).getPresident() + "\n");
+			System.out.println("Presidents Email:  " + tempClubs.get(choice).getPresEmail() + "\n");
+			System.out.println("Presidents Phone Number:  " + tempClubs.get(choice).getPresPhone() + "\n");		
 		}
 		else
 		{
 			System.out.println("Invalid answer.");
 		}
-		
+
 		input.close();
 	}
-	
+
 	//takes in all the parameters for the createProfile method in the FileIO class. 
 	//Returns a statement saying if account was created or not.
 	//if profile is not created, user is notified and program terminates.
@@ -267,8 +324,48 @@ public class Runner {
 			System.out.println("Profile not Created!");
 		System.exit(0);
 	}
+
+	public static String privateMessage() {
+		Scanner scan = new Scanner(System.in);
+		String input;
+		int choice;
+		String message;
+		//loop through profile list and find person to send message to. return matts method with parameters user profile, their profile, and the message.
+		
+		System.out.println("Who do you want to send a message to? (enter their associated number)");
+		for(int i = 0; i < FileIO.getProfiles().size(); i++) {
+			System.out.println(i+1 + ".  " + FileIO.getProfiles().get(i).getName());
+		}
+		choice = scan.nextInt()-1;
+		scan.nextLine();
+		
+		
+		
+		System.out.println("Do you want to send " + FileIO.getProfiles().get(choice).getName() + " a message?  (y/n)");
+		input = scan.nextLine();
+		if(input.equals("y")){
+			System.out.print("Type the message to send:  ");
+			message = scan.nextLine();
+			scan.close();
+			return FileIO.sendMessage(FileIO.getProfiles().get(loggedIn), FileIO.getProfiles().get(choice), message);
+		}
+		scan.close();
+		return null;
+	}
 	
-	public static void privateMessage() {
-		//WIP, will work on with matt
+	public static String privateMessage(Person match) {
+		Scanner scan = new Scanner(System.in);
+		String input;
+		String message;
+		System.out.println("Do you want to send a user a message?  (y/n)");
+		input = scan.nextLine();
+		if(input.equals("y")){
+			System.out.print("Type the message to send:  ");
+			message = scan.nextLine();
+			scan.close();
+			return message;
+		}
+		scan.close();
+		return null;
 	}
 }
