@@ -77,20 +77,6 @@ public class FileIO {
 			System.exit(0);
 		}
 	}
-
-	//Writes changes to the specified file
-	/*
-	public static void write(File file, ArrayList<String> lines) {
-		try {
-			FileWriter writer = new FileWriter(file,false);
-			for(String s: lines) {
-				writer.write(s);
-			}
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
 	public static void write(File file, ArrayList<String> lines) {
 		write(file,lines,false);
 	}
@@ -119,7 +105,7 @@ public class FileIO {
 
 	//Returns profileList
 	public static ArrayList<Person> getProfiles(){
-		//validatePersons();
+		validatePersons();
 		return profileList;
 	}
 
@@ -132,7 +118,7 @@ public class FileIO {
 	//This method assigns values to the current club
 	private static void assignClubValues(Club club, String s) {
 
-		/*
+		
 		//name
 		if(s.contains("name:")) {
 			club.setName(s.substring(s.indexOf("name:")+"name:".length()));
@@ -164,7 +150,7 @@ public class FileIO {
 		if(s.contains("keywords:")) {
 			s.setKeywords(new ArrayList<String>(Arrays.asList(s.substring(s.indexOf("keywords:")+"keywords:".length()).split("/"))));
 		}
-		 */
+		 
 	}
 
 
@@ -210,7 +196,7 @@ public class FileIO {
 				person.setDormChoices(dormList);
 			}
 		}
-		/*
+		
 		//major
 		if(s.contains("major:")){
 			person.setMajor(s.substring(s.indexOf("major:")+"major:".length()));
@@ -278,7 +264,7 @@ public class FileIO {
 		}
 		else
 			person.setRoomateDislikes(null);
-		 */
+		 
 	}
 
 	/* Makes sure that certain essential elements are part of each persons profile
