@@ -1,9 +1,8 @@
-import Dorms.Dorms;
-import gender.Gender;
+package main;
 
 import java.util.ArrayList;
 
-public class PERSON {
+public class Person {
     int ID, age;
     String name, yearInSchool, major, password, username, email;
     String hobbies, petPeeves, roommatePreferences, roommateDislikes;
