@@ -61,7 +61,7 @@ public class Runner {
 		}
 
 
-		input.close();
+		
 	}
 
 	public static Person matchPeople(Person profile){
@@ -135,7 +135,7 @@ public class Runner {
 				index = i;
 			}
 		}
-		input.close();
+		
 		return index;
 	}
 	//prints off options for user to interact with.
@@ -253,7 +253,7 @@ public class Runner {
 			}
 
 		}
-		input.close();
+		
 	}
 
 	//this method will allow the user to remove their profile, then terminate program
@@ -296,7 +296,7 @@ public class Runner {
 			System.out.println("Invalid answer.");
 		}
 
-		input.close();
+		
 	}
 
 	//takes in all the parameters for the createProfile method in the FileIO class. 
@@ -349,7 +349,7 @@ public class Runner {
 			scan.close();
 			return FileIO.sendMessage(FileIO.getProfiles().get(loggedIn), FileIO.getProfiles().get(choice), message);
 		}
-		scan.close();
+		
 		return null;
 	}
 	
@@ -365,7 +365,7 @@ public class Runner {
 			scan.close();
 			return message;
 		}
-		scan.close();
+		
 		return null;
 	}
 }
