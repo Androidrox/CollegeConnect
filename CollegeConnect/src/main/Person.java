@@ -12,13 +12,15 @@ public class Person {
     public String getName() {
         return name;
     }
-    public void setName(){
+    public void setName(String name){
+    	this.name = name;
     }
 
     public int getAge(){
         return age;
     }
-    public void setAge(){
+    public void setAge(int age){
+    	this.age = age;
     }
 
     public String getYearInSchool(){
@@ -30,7 +32,8 @@ public class Person {
     public ArrayList<Dorms> getDormChoices(){
         return dormChoices;
     }
-    public void setDormChoices(){
+    public void setDormChoices(ArrayList<Dorms> dormChoices){
+    	this.dormChoices = dormChoices;
     }
 
     public String getMajor(){
