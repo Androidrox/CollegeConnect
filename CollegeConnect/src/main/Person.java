@@ -27,6 +27,7 @@ public class Person {
         return yearInSchool;
     }
     public void setYearInSchool(){
+        this.yearInSchool = yearInSchool;
     }
 
     public ArrayList<Dorms> getDormChoices(){
