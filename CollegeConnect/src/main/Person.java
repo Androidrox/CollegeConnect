@@ -40,54 +40,63 @@ public class Person {
         return major;
     }
     public void setMajor(){
+        this.major = major;
     }
 
     public Gender getGender(){
         return gender;
     }
     public void setGender(){
+        this.gender = gender;
     }
 
     public String getHobbies(){
         return hobbies;
     }
     public void setHobbies(){
+        this.hobbies = hobbies;
     }
 
     public String getPetPeeves(){
         return petPeeves;
     }
     public void setPetPeeves(){
+        this.petPeeves;
     }
 
     public String getRoommatePreferences(){
         return roommatePreferences;
     }
     public void setRoommatePreferences(){
+        this.roommatePreferences = roommatePreferences;
     }
 
     public String getRoommateDislikes(){
         return roommateDislikes;
     }
     public void setRoommateDislikes(){
+        this.roommatesDislikes = roommatePreferences;
     }
 
     public String getEmail(){
         return email;
     }
     public void setEmail(){
+        this.email = email;
     }
 
     public String getUsername(){
         return username;
     }
     public void setUsername(){
+        this.username = username;
     }
 
     public String getPassword(){
         return password;
     }
     public void setPassword(){
+        this.password = password;
     }
 }
 
