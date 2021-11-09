@@ -118,38 +118,41 @@ public class FileIO {
 	//This method assigns values to the current club
 	private static void assignClubValues(Club club, String s) {
 
-
+	try {
 		//name
 		if(s.contains("name:")) {
 			club.setName(s.substring(s.indexOf("name:")+"name:".length()));
 		}
 		if(s.contains("numMembers:")) {
-			club.setNumMembers(s.substring(s.indexOf("numMembers:")+"numMembers:".length()));
+			club.setNumMembers(Integer.valueOf(s.substring(s.indexOf("numMembers:")+"numMembers:".length())));
 		}
 		if(s.contains("location:")) {
-			s.setLocation(s.substring(s.indexOf("location:")+"location:".length()));
+			club.setLocation(s.substring(s.indexOf("location:")+"location:".length()));
 		}
 		if(s.contains("meetingTime:")) {
-			s.setMeetingTime(s.substring(s.indexOf("meetingTime:")+"meetingTime".length()));
+			club.setMeetingTime(s.substring(s.indexOf("meetingTime:")+"meetingTime".length()));
 		}
 		if(s.contains("fees:")) {
-			s.setFees(s.substring(s.indexOf("fees:")+"fees:".length()));
+			club.setFees(s.substring(s.indexOf("fees:")+"fees:".length()));
 		}
 		if(s.contains("description:")) {
-			s.setDescription(s.substring(s.indexOf("description:")+"description:".length()));
+			club.setDescription(s.substring(s.indexOf("description:")+"description:".length()));
 		}
 		if(s.contains("president:")) {
-			s.setPresident(s.substring(s.indexOf("president:")+"president:".length()));
+			club.setPresident(s.substring(s.indexOf("president:")+"president:".length()));
 		}
 		if(s.contains("presPhone:")) {
-			s.setPresPhone(s.substring(s.indexOf("presPhone:")+"presPhone:".length()));
+			club.setPresPhone(s.substring(s.indexOf("presPhone:")+"presPhone:".length()));
 		}
 		if(s.contains("presEmail:")) {
-			s.setPresEmail(s.substring(s.indexOf("presEmail:")+"presEmail:".length()));
+			club.setPresEmail(s.substring(s.indexOf("presEmail:")+"presEmail:".length()));
 		}
 		if(s.contains("keywords:")) {
-			s.setKeywords(new ArrayList<String>(Arrays.asList(s.substring(s.indexOf("keywords:")+"keywords:".length()).split("/"))));
+			club.setKeyWords(new ArrayList<String>(Arrays.asList(s.substring(s.indexOf("keywords:")+"keywords:".length()).split("/"))));
 		}
+	}catch(Exception e) {
+		club.setName(null);
+	}
 
 	}
 
