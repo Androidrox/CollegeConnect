@@ -22,7 +22,7 @@ public class Club {
         String meetingTime, String fees, String description,
         String president, String presPhone, String presEmail,
         ArrayList<String> keyWords){
-      this.name = name;
+      this.name = null;
       this.numMembers = numMembers;
       this.location = location;
       this.meetingTime = meetingTime;
@@ -75,10 +75,53 @@ public class Club {
    public int getNamesId() {
       return namesId;
    }
-
    // getter for keyWords
    public ArrayList<String> getKeyWords() {
       return keyWords;
+   }
+   // setter for name
+   public void setName(String name) {
+      this.name = name;
+   }
+   // setter for description
+   public void setDescription(String description) {
+      this.description = description;
+   }
+   // setter for description
+   public void setFees(String fees) {
+      this.fees = fees;
+   }
+   // setter for keywords
+   public void setKeyWords(ArrayList<String> keyWords) {
+      this.keyWords = keyWords;
+   }
+   // setter for location
+   public void setLocation(String location) {
+      this.location = location;
+   }
+   // setter for meeting time
+   public void setMeetingTime(String meetingTime) {
+      this.meetingTime = meetingTime;
+   }
+   // setter for names id
+   public void setNamesId(int namesId) {
+      this.namesId = namesId;
+   }
+   // setter for number of members
+   public void setNumMembers(int numMembers) {
+      this.numMembers = numMembers;
+   }
+   // setter for president email
+   public void setPresEmail(String presEmail) {
+      this.presEmail = presEmail;
+   }
+   // setter for president
+   public void setPresident(String president) {
+      this.president = president;
+   }
+   // setter for president phone
+   public void setPresPhone(String presPhone) {
+      this.presPhone = presPhone;
    }
 
    // method for checking if keyword is contained
