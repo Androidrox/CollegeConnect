@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Person {
     int ID, age;
-    String name, yearInSchool, major, password, username, email;
+    String name, yearInSchool, major, password, username, email, matchName;
     String hobbies, petPeeves, roommatePreferences, roommateDislikes;
     ArrayList<Dorms> dormChoices;
     Gender gender;
@@ -26,7 +26,7 @@ public class Person {
     public String getYearInSchool(){
         return yearInSchool;
     }
-    public void setYearInSchool(){
+    public void setYearInSchool(String yearInSchool){
         this.yearInSchool = yearInSchool;
     }
 
@@ -40,64 +40,70 @@ public class Person {
     public String getMajor(){
         return major;
     }
-    public void setMajor(){
+    public void setMajor(String major){
         this.major = major;
     }
 
     public Gender getGender(){
         return gender;
     }
-    public void setGender(){
+    public void setGender(Gender gender){
         this.gender = gender;
     }
 
     public String getHobbies(){
         return hobbies;
     }
-    public void setHobbies(){
+    public void setHobbies(String hobbies){
         this.hobbies = hobbies;
     }
 
     public String getPetPeeves(){
         return petPeeves;
     }
-    public void setPetPeeves(){
-        this.petPeeves;
+    public void setPetPeeves(String petPeeves){
+        this.petPeeves = petPeeves;
     }
 
     public String getRoommatePreferences(){
         return roommatePreferences;
     }
-    public void setRoommatePreferences(){
+    public void setRoommatePreferences(String roommatePreferences){
         this.roommatePreferences = roommatePreferences;
     }
 
     public String getRoommateDislikes(){
         return roommateDislikes;
     }
-    public void setRoommateDislikes(){
-        this.roommatesDislikes = roommatePreferences;
+    public void setRoommateDislikes(String roomateDislikes){
+        this.roommateDislikes = roomateDislikes;
     }
 
     public String getEmail(){
         return email;
     }
-    public void setEmail(){
+    public void setEmail(String email){
         this.email = email;
     }
 
     public String getUsername(){
         return username;
     }
-    public void setUsername(){
+    public void setUsername(String username){
         this.username = username;
     }
 
     public String getPassword(){
         return password;
     }
-    public void setPassword(){
+    public void setPassword(String password){
         this.password = password;
+    }
+    public String getMatchName() {
+    	return matchName;
+    }
+    public void setMatchName(String matchName) {
+    	this.matchName = matchName;
     }
 }
 

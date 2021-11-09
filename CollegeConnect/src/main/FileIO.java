@@ -118,7 +118,7 @@ public class FileIO {
 	//This method assigns values to the current club
 	private static void assignClubValues(Club club, String s) {
 
-		
+
 		//name
 		if(s.contains("name:")) {
 			club.setName(s.substring(s.indexOf("name:")+"name:".length()));
@@ -150,7 +150,7 @@ public class FileIO {
 		if(s.contains("keywords:")) {
 			s.setKeywords(new ArrayList<String>(Arrays.asList(s.substring(s.indexOf("keywords:")+"keywords:".length()).split("/"))));
 		}
-		 
+
 	}
 
 
@@ -196,7 +196,7 @@ public class FileIO {
 				person.setDormChoices(dormList);
 			}
 		}
-		
+
 		//major
 		if(s.contains("major:")){
 			person.setMajor(s.substring(s.indexOf("major:")+"major:".length()));
@@ -253,18 +253,22 @@ public class FileIO {
 
 		//roomatePreferences
 		if(s.contains("roomatePref:")) {
-			person.setRoomatePreferences(s.substring(s.indexOf("roomatePrefs:")+"roomatePrefs:".length()));
+			person.setRoommatePreferences(s.substring(s.indexOf("roomatePrefs:")+"roomatePrefs:".length()));
 		}
 		else
-			person.setRoomatePref(null);
+			person.setRoommatePreferences(null);
 
 		//rooamteDislikes
 		if(s.contains("roomateDislikes:")) {
-			person.setRoomateDislikes(s.substring(s.indexOf("roomateDislikes:")+"roomateDislikes:".length()));
+			person.setRoommateDislikes(s.substring(s.indexOf("roomateDislikes:")+"roomateDislikes:".length()));
 		}
 		else
-			person.setRoomateDislikes(null);
-		 
+			person.setRoommateDislikes(null);
+		if(s.contains("match:")) {
+			person.setMatchName(s.substring(s.indexOf("match:")+"match:".length()));
+		}
+		else
+			person.setMatchName(null);
 	}
 
 	/* Makes sure that certain essential elements are part of each persons profile
@@ -398,7 +402,7 @@ public class FileIO {
 	}
 
 	//Creates a profile for a new user
-	//Profile is created under the path "resouces//profiles//name" folder, where name is the name of the new user
+	//Profile is created under the path "resources//profiles//name" folder, where name is the name of the new user
 	public static boolean createProfile(String username, String password, String name, String yearInSchool, String gender, int age, String email) {
 		File profileFolder = new File("resources//profiles//" + name);
 		if(!profileFolder.exists())
@@ -418,5 +422,13 @@ public class FileIO {
 		}
 		else
 			return false;
+	}
+
+	public static void createMatch(Person user, Person match) {
+		File profileFile = new File("resources//profiles//"+user.getName()+"//"+user.getName()+".txt");
+		if(profileFile.exists())
+			write(profileFile,"match:"+user.getName(),true);
+		else
+			System.out.println("Could not find file");
 	}
 }

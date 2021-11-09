@@ -3,14 +3,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Runner {
-	
+
 	private static int loggedIn = -1;
 	public static void main(String[] args) {
 
 
 		Scanner input = new Scanner(System.in);
 		//the loggedIn integer is set to -1 as arrays have an index at 0.  
-	
+
 		ArrayList<Club> clubs = FileIO.getClubs();
 
 		//asks user is they have an existing file.  if not, they can make one and then sign in.  If they do, then it skips to sign in.
@@ -35,15 +35,16 @@ public class Runner {
 			if(choice > 0 && choice < 5) {
 				switch(choice) {
 				case 1:
-					Person match = matchPeople(FileIO.getProfiles().get(loggedIn));
-					createMatch(FileIO.getProfiles().get(loggedIn),match);
-					File.IO.sendMessage(FileIO.getProfiles().get(loggedIn), match, privateMessage(match));
+					Person match = matchPeoples(FileIO.getProfiles().get(loggedIn));
+					if(match != null)
+					FileIO.createMatch(FileIO.getProfiles().get(loggedIn),match);
+					FileIO.sendMessage(FileIO.getProfiles().get(loggedIn), match, privateMessage(match));
 					break;
 				case 2:
 					editInformation(FileIO.getProfiles().get(loggedIn));
 					break;
 				case 3:
-					findClub(clubs);
+					findClub();
 					break;
 				case 4:
 					deleteProfile(FileIO.getProfiles().get(loggedIn));
@@ -61,9 +62,9 @@ public class Runner {
 		}
 
 
-		
-	}
 
+	}
+	/*
 	public static Person matchPeople(Person profile){
 		Scanner scan = new Scanner(System.in);
 		int input = -1;
@@ -114,6 +115,56 @@ public class Runner {
 					return FileIO.getProfiles().get(i);
 			}
 		}
+	}*/
+
+	public static Person matchPeoples(Person profile) {
+		Scanner scanner = new Scanner(System.in);
+		int input = -1;
+		int i = 0;
+		String choice = "";
+		System.out.println("Instructions:\nEnter -1 to exit.\nEnter > to move to the right, and < to move to the left");
+		while(true) {
+			if(!profile.getName().equals(FileIO.getProfiles().get(i).getName())) {
+				System.out.println("--------------------------------------------------------");
+				System.out.println("Name:  " + FileIO.getProfiles().get(i).getName());
+				System.out.println("Age:  " + FileIO.getProfiles().get(i).getAge());
+				System.out.println("Gender:  " + FileIO.getProfiles().get(i).getGender());
+				System.out.println("Major:  " + FileIO.getProfiles().get(i).getMajor());
+				System.out.println("Email:  " + FileIO.getProfiles().get(i).getEmail());
+				System.out.println("Hobbies:  " + FileIO.getProfiles().get(i).getHobbies());
+				System.out.println("Peeves:  " + FileIO.getProfiles().get(i).getPetPeeves());
+				System.out.println("Roommate Preferences:  " + FileIO.getProfiles().get(i).getRoommatePreferences());
+				System.out.println("Roomate Dislikes:  " + FileIO.getProfiles().get(i).getRoommateDislikes());
+				System.out.println("Would you like to match with this person?  (y/n)");
+				choice = scanner.nextLine();
+				if(choice.equalsIgnoreCase("y"))
+					break;
+				if(choice.equals("-1"));
+				while(true) {
+					if(choice.equals(">") && i != FileIO.getProfiles().size()) {
+						i++;
+						break;
+					}
+					if(choice.equals("<") && i != 0) {
+						i--;
+						break;
+					}
+					else if(choice.equals(">"))
+						System.out.println("Already at first user.");
+					else if(choice.equals("<"))
+						System.out.println("Already at last user.");
+					else if(choice.equals("-1"))
+						break;
+					else
+						break;
+				}
+			}
+
+		}
+		if(i != -1) {
+			return FileIO.getProfiles().get(i);
+		}
+		return null;
 	}
 
 
@@ -129,13 +180,13 @@ public class Runner {
 		String username = input.nextLine();
 		System.out.println("Enter your Password:  ");
 		String password = input.nextLine();
-		int index;
+		int index = -1;
 		for(int i = 0; i < FileIO.getProfiles().size(); i++) {
 			if(username.equals(FileIO.getProfiles().get(i).getUsername()) && (password.equals(FileIO.getProfiles().get(i).getPassword()))){
 				index = i;
 			}
 		}
-		
+
 		return index;
 	}
 	//prints off options for user to interact with.
@@ -186,12 +237,21 @@ public class Runner {
 			System.out.println("Current gender is:  " + profile.getGender());
 			System.out.print("Change gender to:  ");
 			String gender = input.nextLine();
-			profile.setGender(gender);
+			Gender genderEnum = null;
+			try {
+				genderEnum = Gender.valueOf(gender.toLowerCase());
+			}catch(Exception e) {
+				System.out.println("Not a valid option for gender, Use male, female, or other.");
+			}
+			if(genderEnum != null)
+				profile.setGender(genderEnum);
+			else
+				System.out.println("Not a valid option for gender, Use male, female, or other.");
 			break;
 		case 4:
 			System.out.println("Current Year is :  " + profile.getYearInSchool());
 			System.out.print("Change current year to:  ");
-			int year = input.nextInt();
+			String year = input.nextLine();
 			profile.setYearInSchool(year);
 			break;
 		case 5:
@@ -213,16 +273,16 @@ public class Runner {
 			profile.setPetPeeves(peeves);
 			break;
 		case 8:
-			System.out.println("Current Preferences are:  " + profile.getRoomatePreferences());
+			System.out.println("Current Preferences are:  " + profile.getRoommatePreferences());
 			System.out.print("Change Preferences to:  ");
 			String preferences = input.nextLine();
-			profile.setRoomatePreferences(preferences);
+			profile.setRoommatePreferences(preferences);
 			break;
 		case 9:
-			System.out.println("Current Dislikes are:  " + profile.getRoomateDislikes());
+			System.out.println("Current Dislikes are:  " + profile.getRoommateDislikes());
 			System.out.print("Change Dislikes to:  ");
 			String dislikes = input.nextLine();
-			profile.setRoomateDislikes(dislikes);
+			profile.setRoommateDislikes(dislikes);
 			break;
 		case 10:
 			System.out.print("Current Dorm choices are:  ");
@@ -242,7 +302,7 @@ public class Runner {
 			for(int i = 0; i < 3; i ++) {
 				while(true) {
 					try {
-						dorms.set(i,Enum.valueOf(Dorms.class, name));
+						dorms.set(i,Enum.valueOf(Dorms.class, dorm));
 					} catch(Exception e) {
 						System.out.print("Error.  Not a valid option.");
 						continue;
@@ -253,7 +313,7 @@ public class Runner {
 			}
 
 		}
-		
+
 	}
 
 	//this method will allow the user to remove their profile, then terminate program
@@ -296,7 +356,7 @@ public class Runner {
 			System.out.println("Invalid answer.");
 		}
 
-		
+
 	}
 
 	//takes in all the parameters for the createProfile method in the FileIO class. 
@@ -331,28 +391,27 @@ public class Runner {
 		int choice;
 		String message;
 		//loop through profile list and find person to send message to. return matts method with parameters user profile, their profile, and the message.
-		
+
 		System.out.println("Who do you want to send a message to? (enter their associated number)");
 		for(int i = 0; i < FileIO.getProfiles().size(); i++) {
 			System.out.println(i+1 + ".  " + FileIO.getProfiles().get(i).getName());
 		}
 		choice = scan.nextInt()-1;
 		scan.nextLine();
-		
-		
-		
+
+
+
 		System.out.println("Do you want to send " + FileIO.getProfiles().get(choice).getName() + " a message?  (y/n)");
 		input = scan.nextLine();
 		if(input.equals("y")){
 			System.out.print("Type the message to send:  ");
 			message = scan.nextLine();
-			scan.close();
 			return FileIO.sendMessage(FileIO.getProfiles().get(loggedIn), FileIO.getProfiles().get(choice), message);
 		}
-		
+
 		return null;
 	}
-	
+
 	public static String privateMessage(Person match) {
 		Scanner scan = new Scanner(System.in);
 		String input;
@@ -362,10 +421,9 @@ public class Runner {
 		if(input.equals("y")){
 			System.out.print("Type the message to send:  ");
 			message = scan.nextLine();
-			scan.close();
 			return message;
 		}
-		
+
 		return null;
 	}
 }
