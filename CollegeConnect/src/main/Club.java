@@ -22,7 +22,7 @@ public class Club {
         String meetingTime, String fees, String description,
         String president, String presPhone, String presEmail,
         ArrayList<String> keyWords){
-      this.name = null;
+      this.name = name;
       this.numMembers = numMembers;
       this.location = location;
       this.meetingTime = meetingTime;
@@ -32,7 +32,6 @@ public class Club {
       this.presPhone = presPhone;
       this.presEmail = presEmail;
       this.keyWords = keyWords;
-      this.namesId = namesId;
    }
 
    // getter for name
