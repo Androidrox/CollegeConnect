@@ -226,8 +226,10 @@ public class Runner {
 
 	//this method allows the user to edit profile information
 	public static void editInformation(Person profile) {
+		ArrayList<String> lines = new ArrayList<String>();
+
 		Scanner input = new Scanner(System.in);
-		int choice = input.nextInt();
+
 		System.out.println("What would you like to change?");
 		System.out.println("1.  Name");
 		System.out.println("2.  Age");
@@ -239,7 +241,9 @@ public class Runner {
 		System.out.println("8.  Roommate Preferences");
 		System.out.println("9.  Roommate Dislikes");
 		System.out.println("10.  Dorm Choices");
-
+		//eventually set this up for a string and then check if its an int, if it is run, if it isn't return an error and return to main method
+		int choice = input.nextInt();
+		input.nextLine();
 		//this switch takes the users input and runs a block of code to list what a current value is, and then gives you the option to change it
 		switch(choice) {
 		case 1:  
@@ -247,12 +251,19 @@ public class Runner {
 			System.out.print("Change name to:  ");
 			String name = input.nextLine();
 			profile.setName(name);
+			lines.add("name:" + profile.getName());
 			break;
 		case 2:
 			System.out.println("Current age is:  " + profile.getAge());
 			System.out.print("Change age to:  ");
 			int age = input.nextInt();
+			//loops until the user enters a valid value from 1-100
+			while(age < 0 || age > 100) {
+				System.out.println("Not a valid age.  Age range 1-100");
+				age = input.nextInt();
+			}
 			profile.setAge(age);
+			lines.add("age:" + profile.getAge());
 			break;
 		case 3:
 			System.out.println("Current gender is:  " + profile.getGender());
@@ -268,42 +279,49 @@ public class Runner {
 				profile.setGender(genderEnum);
 			else
 				System.out.println("Not a valid option for gender, Use male, female, or other.");
+			lines.add("gender:" + profile.getGender());
 			break;
 		case 4:
 			System.out.println("Current Year is :  " + profile.getYearInSchool());
 			System.out.print("Change current year to:  ");
 			String year = input.nextLine();
 			profile.setYearInSchool(year);
+			lines.add("yearInSchool:" + profile.getYearInSchool());
 			break;
 		case 5:
 			System.out.println("Current Major:  " + profile.getMajor());
 			System.out.println("Change Major to:  ");
 			String major = input.nextLine();
 			profile.setMajor(major);
+			lines.add("major:" + profile.getMajor());
 			break;
 		case 6:
 			System.out.println("Current Hobbies are:  " + profile.getHobbies());
 			System.out.print("Change Hobbies to:  ");
 			String hobbies = input.nextLine();
 			profile.setHobbies(hobbies);
+			lines.add("hobbies:" + profile.getHobbies());
 			break;
 		case 7:
 			System.out.println("Current Peeves are:  " + profile.getPetPeeves());
 			System.out.print("Change Peeves to:  ");
 			String peeves = input.nextLine();
 			profile.setPetPeeves(peeves);
+			lines.add("petPeeves:" + profile.getPetPeeves());
 			break;
 		case 8:
 			System.out.println("Current Preferences are:  " + profile.getRoommatePreferences());
 			System.out.print("Change Preferences to:  ");
 			String preferences = input.nextLine();
 			profile.setRoommatePreferences(preferences);
+			lines.add("roomatePref::" + profile.getRoommatePreferences());
 			break;
 		case 9:
 			System.out.println("Current Dislikes are:  " + profile.getRoommateDislikes());
 			System.out.print("Change Dislikes to:  ");
 			String dislikes = input.nextLine();
 			profile.setRoommateDislikes(dislikes);
+			lines.add("roomateDislikes:" + profile.getRoommateDislikes());
 			break;
 		case 10:
 			System.out.print("Current Dorm choices are:  ");
@@ -320,21 +338,27 @@ public class Runner {
 			String dorm = input.nextLine();
 			//temporary solution for now, still don't know what to do for arrayList casting here
 			//I need to input the user inputed string into the arrayList at index i, however since its an enum without an assigned string I literally can't
+			String temp = "dormChoices:";
 			for(int i = 0; i < 3; i ++) {
 				while(true) {
 					try {
 						dorms.set(i,Enum.valueOf(Dorms.class, dorm));
-					} catch(Exception e) {
-						System.out.print("Error.  Not a valid option.");
-						continue;
-					}
+						if(i != 2)
+							temp += dorm + "/";
+						else
+							temp += dorm;
+						;					} catch(Exception e) {
+							System.out.print("Error.  Not a valid option.");
+							i--;
+							continue;
+						}
 					break;
 				}
 				dorm = input.nextLine();
 			}
-
+			lines.add(temp);
 		}
-
+			FileIO.write(profile, lines, false);
 	}
 
 	//this method will allow the user to remove their profile, then terminate program
