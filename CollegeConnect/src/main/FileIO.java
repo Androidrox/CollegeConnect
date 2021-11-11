@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class FileIO {
 	//File locations for the two ids lists
 	private static File personIdFile = new File("resources//personIdFile.txt");
-	private static File clubIdFile = new File("clubIdFile.txt");
+	private static File clubIdFile = new File("resources//clubIdFile.txt");
 
 	//ArrayLists to store the profiles and clubs
 	private static ArrayList<Person> profileList = new ArrayList<Person>();
@@ -38,16 +38,19 @@ public class FileIO {
 				String temp = personIdReader.nextLine();
 				if(temp.equals(""))
 					continue;
-				Scanner profileReader = new Scanner(new File("resources//profiles//" + temp +"//" + temp +".txt"));
-				Person tempPerson = new Person();
-				while(profileReader.hasNextLine()) {
-					String currentToken = profileReader.nextLine();
-					assignPersonValues(tempPerson,currentToken);
+				File profileFile = new File("resources//profiles//" + temp +"//" + temp +".txt");
+				if(profileFile.exists()) {
+					Scanner profileReader = new Scanner(profileFile);
+					Person tempPerson = new Person();
+					while(profileReader.hasNextLine()) {
+						String currentToken = profileReader.nextLine();
+						assignPersonValues(tempPerson,currentToken);
+
+					}
+					profileReader.close();
+					profileList.add(tempPerson);
 
 				}
-				profileReader.close();
-				profileList.add(tempPerson);
-
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found!");
@@ -118,41 +121,41 @@ public class FileIO {
 	//This method assigns values to the current club
 	private static void assignClubValues(Club club, String s) {
 
-	try {
-		//name
-		if(s.contains("name:")) {
-			club.setName(s.substring(s.indexOf("name:")+"name:".length()));
+		try {
+			//name
+			if(s.contains("name:")) {
+				club.setName(s.substring(s.indexOf("name:")+"name:".length()));
+			}
+			if(s.contains("numMembers:")) {
+				club.setNumMembers(Integer.valueOf(s.substring(s.indexOf("numMembers:")+"numMembers:".length())));
+			}
+			if(s.contains("location:")) {
+				club.setLocation(s.substring(s.indexOf("location:")+"location:".length()));
+			}
+			if(s.contains("meetingTime:")) {
+				club.setMeetingTime(s.substring(s.indexOf("meetingTime:")+"meetingTime".length()));
+			}
+			if(s.contains("fees:")) {
+				club.setFees(s.substring(s.indexOf("fees:")+"fees:".length()));
+			}
+			if(s.contains("description:")) {
+				club.setDescription(s.substring(s.indexOf("description:")+"description:".length()));
+			}
+			if(s.contains("president:")) {
+				club.setPresident(s.substring(s.indexOf("president:")+"president:".length()));
+			}
+			if(s.contains("presPhone:")) {
+				club.setPresPhone(s.substring(s.indexOf("presPhone:")+"presPhone:".length()));
+			}
+			if(s.contains("presEmail:")) {
+				club.setPresEmail(s.substring(s.indexOf("presEmail:")+"presEmail:".length()));
+			}
+			if(s.contains("keywords:")) {
+				club.setKeyWords(new ArrayList<String>(Arrays.asList(s.substring(s.indexOf("keywords:")+"keywords:".length()).split("/"))));
+			}
+		}catch(Exception e) {
+			club.setName(null);
 		}
-		if(s.contains("numMembers:")) {
-			club.setNumMembers(Integer.valueOf(s.substring(s.indexOf("numMembers:")+"numMembers:".length())));
-		}
-		if(s.contains("location:")) {
-			club.setLocation(s.substring(s.indexOf("location:")+"location:".length()));
-		}
-		if(s.contains("meetingTime:")) {
-			club.setMeetingTime(s.substring(s.indexOf("meetingTime:")+"meetingTime".length()));
-		}
-		if(s.contains("fees:")) {
-			club.setFees(s.substring(s.indexOf("fees:")+"fees:".length()));
-		}
-		if(s.contains("description:")) {
-			club.setDescription(s.substring(s.indexOf("description:")+"description:".length()));
-		}
-		if(s.contains("president:")) {
-			club.setPresident(s.substring(s.indexOf("president:")+"president:".length()));
-		}
-		if(s.contains("presPhone:")) {
-			club.setPresPhone(s.substring(s.indexOf("presPhone:")+"presPhone:".length()));
-		}
-		if(s.contains("presEmail:")) {
-			club.setPresEmail(s.substring(s.indexOf("presEmail:")+"presEmail:".length()));
-		}
-		if(s.contains("keywords:")) {
-			club.setKeyWords(new ArrayList<String>(Arrays.asList(s.substring(s.indexOf("keywords:")+"keywords:".length()).split("/"))));
-		}
-	}catch(Exception e) {
-		club.setName(null);
-	}
 
 	}
 
@@ -170,15 +173,11 @@ public class FileIO {
 		if(s.contains("age:")){
 			person.setAge(Integer.parseInt(s.substring(s.indexOf("age:")+"age:".length())));
 		}
-		else
-			person.setAge(0);
 
 		//yearInSchool
 		if(s.contains("yearInSchool:")){
 			person.setYearInSchool(s.substring(s.indexOf("yearInSchool:")+"yearInSchool:".length()));
 		}
-		else
-			person.setYearInSchool(null);
 
 		//dormChoices
 		if(s.contains("dormChoices:")){
@@ -204,29 +203,21 @@ public class FileIO {
 		if(s.contains("major:")){
 			person.setMajor(s.substring(s.indexOf("major:")+"major:".length()));
 		}
-		else
-			person.setMajor(null);
 
 		//username
 		if(s.contains("username:")) {
 			person.setUsername(s.substring(s.indexOf("username:")+"username:".length()));
 		}
-		else
-			person.setUsername(null);
 
 		//password
 		if(s.contains("password:")) {
 			person.setPassword(s.substring(s.indexOf("password:")+"password:".length()));
 		}
-		else
-			person.setPassword(null);
 
 		//email
 		if(s.contains("email:")) {
 			person.setEmail(s.substring(s.indexOf("email:")+"email:".length()));
 		}
-		else
-			person.setEmail(null);
 
 		//gender
 		if(s.contains("gender:")){
@@ -244,34 +235,24 @@ public class FileIO {
 		if(s.contains("hobbies:")){
 			person.setHobbies(s.substring(s.indexOf("hobbies:")+"hobbies:".length()));
 		}
-		else
-			person.setHobbies(null);
 
 		//petPeeves
 		if(s.contains("petPeeves:")) {
 			person.setPetPeeves(s.substring(s.indexOf("petPeeves:")+"petPeeves:".length()));
 		}
-		else
-			person.setPetPeeves(null);
 
 		//roomatePreferences
 		if(s.contains("roomatePref:")) {
 			person.setRoommatePreferences(s.substring(s.indexOf("roomatePrefs:")+"roomatePrefs:".length()));
 		}
-		else
-			person.setRoommatePreferences(null);
 
 		//rooamteDislikes
 		if(s.contains("roomateDislikes:")) {
 			person.setRoommateDislikes(s.substring(s.indexOf("roomateDislikes:")+"roomateDislikes:".length()));
 		}
-		else
-			person.setRoommateDislikes(null);
 		if(s.contains("match:")) {
 			person.setMatchName(s.substring(s.indexOf("match:")+"match:".length()));
 		}
-		else
-			person.setMatchName(null);
 	}
 
 	/* Makes sure that certain essential elements are part of each persons profile
@@ -348,6 +329,7 @@ public class FileIO {
 				while(reader.hasNextLine()) {
 					System.out.println(reader.nextLine());
 				}
+				reader.close();
 			} catch (FileNotFoundException e) {
 				System.out.println("Could not find file");
 			}
@@ -365,13 +347,14 @@ public class FileIO {
 		}
 	}
 	public static void deleteProfile(Person profile) {
-		deleteFile(new File("resources//profiles//"+profile.getName()));
+		String replacedName = profile.getName().replace(' ', '_');
+		deleteFile(new File("resources//profiles//"+replacedName));
 		try {
 			Scanner reader = new Scanner(personIdFile);
 			ArrayList<String> lines = new ArrayList<String>();
 			while(reader.hasNextLine()) {
 				String temp = reader.nextLine();
-				if(!temp.equals(profile.getName())) {
+				if(!temp.equals(replacedName)) {
 					lines.add(temp);
 				}
 			}
@@ -380,7 +363,7 @@ public class FileIO {
 					profileList.remove(i);
 				}
 			}
-			if(!new File("resources//profiles//"+profile.getName()).exists())
+			if(!new File("resources//profiles//"+replacedName).exists())
 				write(personIdFile, lines,false);
 		} catch (FileNotFoundException e) {
 		}
@@ -407,16 +390,17 @@ public class FileIO {
 	//Creates a profile for a new user
 	//Profile is created under the path "resources//profiles//name" folder, where name is the name of the new user
 	public static boolean createProfile(String username, String password, String name, String yearInSchool, String gender, int age, String email) {
-		File profileFolder = new File("resources//profiles//" + name);
+		String replacedName = name.replace(' ', '_');
+		File profileFolder = new File("resources//profiles//" + replacedName);
 		if(!profileFolder.exists())
 			profileFolder.mkdir();
-		File profileFile = new File("resources//profiles//"+name+"//"+name+".txt");
+		File profileFile = new File("resources//profiles//"+replacedName+"//"+replacedName+".txt");
 		if(!profileFile.exists()) {
 			try {
 				profileFile.createNewFile();
 				String[] lines = {"name:"+name+"\n","username:"+username+"\n","password:"+password+"\n","yearInSchool:"+yearInSchool+"\n","age:"+age+"\n","email:"+email+"\n"};
 				write(profileFile,new ArrayList<String>(Arrays.asList(lines)));
-				write(personIdFile,name+"\n",true);
+				write(personIdFile,replacedName+"\n",true);
 				return true;
 			} catch (IOException e) {
 				System.out.println("Could not create file");

@@ -11,20 +11,20 @@ public class Runner {
 		Scanner input = new Scanner(System.in);
 		//the loggedIn integer is set to -1 as arrays have an index at 0.  
 
-		ArrayList<Club> clubs = FileIO.getClubs();
-
 		//asks user is they have an existing file.  if not, they can make one and then sign in.  If they do, then it skips to sign in.
 		System.out.println("Do you have an account? (y/n)");
 		String hasAccount = input.nextLine();
-		if(hasAccount == "n") {
+		if(hasAccount.equalsIgnoreCase("n")) {
 			createProfile();
+			FileIO.readPersons();
 		}
-
+		FileIO.readPersons();
+		FileIO.readClubs();
 		//This while loop runs the logIn() method and stops looping if the returned index is greater than -1.
 		while(loggedIn < 0) {
 			loggedIn = logIn();
 			if(loggedIn < 0)
-				System.out.println("Incorrect Username or Password!/n");
+				System.out.println("Incorrect Username or Password!\n");
 		}
 
 		int choice = 0;
@@ -36,9 +36,10 @@ public class Runner {
 				switch(choice) {
 				case 1:
 					Person match = matchPeoples(FileIO.getProfiles().get(loggedIn));
-					if(match != null)
-					FileIO.createMatch(FileIO.getProfiles().get(loggedIn),match);
-					FileIO.sendMessage(FileIO.getProfiles().get(loggedIn), match, privateMessage(match));
+					if(match != null) {
+						FileIO.createMatch(FileIO.getProfiles().get(loggedIn),match);
+						FileIO.sendMessage(FileIO.getProfiles().get(loggedIn), match, privateMessage(match));
+					}
 					break;
 				case 2:
 					editInformation(FileIO.getProfiles().get(loggedIn));
@@ -124,7 +125,7 @@ public class Runner {
 		String choice = "";
 		System.out.println("Instructions:\nEnter -1 to exit.\nEnter > to move to the right, and < to move to the left");
 		while(true) {
-			if(!profile.getName().equals(FileIO.getProfiles().get(i).getName())) {
+			if((!profile.getName().equals(FileIO.getProfiles().get(i).getName()) && profile.getGender() != FileIO.getProfiles().get(i).getGender())) {
 				System.out.println("--------------------------------------------------------");
 				System.out.println("Name:  " + FileIO.getProfiles().get(i).getName());
 				System.out.println("Age:  " + FileIO.getProfiles().get(i).getAge());
@@ -135,33 +136,52 @@ public class Runner {
 				System.out.println("Peeves:  " + FileIO.getProfiles().get(i).getPetPeeves());
 				System.out.println("Roommate Preferences:  " + FileIO.getProfiles().get(i).getRoommatePreferences());
 				System.out.println("Roomate Dislikes:  " + FileIO.getProfiles().get(i).getRoommateDislikes());
-				System.out.println("Would you like to match with this person?  (y/n)");
+				System.out.println("Would you like to match with this person? (y) (<) (>) (-1)");
 				choice = scanner.nextLine();
 				if(choice.equalsIgnoreCase("y"))
 					break;
-				if(choice.equals("-1"));
+				if(choice.equals("-1"))
+					break;
 				while(true) {
-					if(choice.equals(">") && i != FileIO.getProfiles().size()) {
+					if(choice.equals(">") && i >= FileIO.getProfiles().size()-1) {
+						System.out.println("Already at last user.");
+					}
+					else if(choice.equals("<") && i <= 0) {
+						System.out.println("Already at first user");
+					}
+					else if((choice.equals("<") && i >= 2) && FileIO.getProfiles().get(i-1).getName().equals(profile.getName())) {
+						i-=2;
+						break;
+					}
+					else if((choice.equals(">") && i <= FileIO.getProfiles().size()-3) && FileIO.getProfiles().get(i+1).getName().equals(profile.getName())) {
+						i+=2;
+						break;
+					}
+					else if((choice.equals("<") && i == 1) && FileIO.getProfiles().get(i-1).getName().equals(profile.getName())) {
+						System.out.println("Already at first user");
+					}
+					else if((choice.equals("<") && i == FileIO.getProfiles().size()-2) && FileIO.getProfiles().get(i+1).getName().equals(profile.getName())) {
+						System.out.println("Already at first user");
+					}
+					else if(choice.equals(">")) {
 						i++;
 						break;
 					}
-					if(choice.equals("<") && i != 0) {
+					else if(choice.equals("<")) {
 						i--;
 						break;
 					}
-					else if(choice.equals(">"))
-						System.out.println("Already at first user.");
-					else if(choice.equals("<"))
-						System.out.println("Already at last user.");
-					else if(choice.equals("-1"))
-						break;
 					else
 						break;
+					System.out.println("Would you like to match with this person? (y) (<) (>) (-1)");
+					choice = scanner.nextLine();
 				}
 			}
+			else
+				i++;
 
 		}
-		if(i != -1) {
+		if(!choice.equals("-1")) {
 			return FileIO.getProfiles().get(i);
 		}
 		return null;
@@ -178,11 +198,12 @@ public class Runner {
 		Scanner input = new Scanner(System.in);
 		System.out.print("Enter your Username:  ");
 		String username = input.nextLine();
-		System.out.println("Enter your Password:  ");
+		System.out.print("Enter your Password:  ");
 		String password = input.nextLine();
 		int index = -1;
 		for(int i = 0; i < FileIO.getProfiles().size(); i++) {
 			if(username.equals(FileIO.getProfiles().get(i).getUsername()) && (password.equals(FileIO.getProfiles().get(i).getPassword()))){
+
 				index = i;
 			}
 		}
@@ -376,13 +397,15 @@ public class Runner {
 		String gender = input.nextLine();
 		System.out.print("Enter age:  ");
 		int age = input.nextInt();
+		input.nextLine();
 		System.out.print("Enter email:  ");
 		String email = input.nextLine();
 		if(FileIO.createProfile(username, password, name, yearInSchool, gender, age, email)) 
 			System.out.println("Profile Created!");
-		else
-			System.out.println("Profile not Created!");
-		System.exit(0);
+		else {
+			System.out.println("Profile already exists or there was an error creating the profile.");
+			System.exit(0);
+		}
 	}
 
 	public static String privateMessage() {
