@@ -314,7 +314,7 @@ public class Runner {
 			System.out.print("Change Preferences to:  ");
 			String preferences = input.nextLine();
 			profile.setRoommatePreferences(preferences);
-			lines.add("roomatePref::" + profile.getRoommatePreferences());
+			lines.add("roomatePref:" + profile.getRoommatePreferences());
 			break;
 		case 9:
 			System.out.println("Current Dislikes are:  " + profile.getRoommateDislikes());
@@ -358,6 +358,7 @@ public class Runner {
 			}
 			lines.add(temp);
 		}
+		
 			FileIO.write(profile, lines, false);
 	}
 
