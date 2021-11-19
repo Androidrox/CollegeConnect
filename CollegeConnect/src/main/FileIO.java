@@ -32,7 +32,7 @@ public class FileIO {
 
 		try {
 			Scanner personIdReader = new Scanner(personIdFile);
-
+			createProfilesFolder();
 			//Goes through each entry in the personIdFile and then accesses the file with the id name that it reads
 			while(personIdReader.hasNextLine()) {
 				String temp = personIdReader.nextLine();
@@ -433,6 +433,7 @@ public class FileIO {
 		//Profile is created under the path "resources//profiles//name" folder, where name is the name of the new user
 		public static boolean createProfile(String username, String password, String name, String yearInSchool, String gender, int age, String email) {
 			String replacedName = name.replace(' ', '_');
+			createProfilesFolder();
 			File profileFolder = new File("resources//profiles//" + replacedName);
 			if(!profileFolder.exists())
 				profileFolder.mkdir();
@@ -454,12 +455,18 @@ public class FileIO {
 		}
 
 		public static void createMatch(Person user, Person match) {
+	
 			File profileFile = new File("resources//profiles//"+user.getName()+"//"+user.getName()+".txt");
 			if(profileFile.exists())
 				write(profileFile,"match:"+user.getName(),true);
 			else
 				System.out.println("Could not find file");
 		}
-
+		
+		private static void createProfilesFolder() {
+			File profilesFolder = new File("resources//profiles");
+			if(!profilesFolder.exists())
+				profilesFolder.mkdir();
+		}
 
 	}
