@@ -108,7 +108,6 @@ public class FileIO {
 
 	public static void write(Person profile, ArrayList<String> lines, boolean append) {
 		File personFile = new File("resources//profiles//"+ profile.getName().replace(" ", "_") + "//" + profile.getName().replace(" ", "_")+".txt");
-		System.out.println(personFile.getPath());
 		if(personFile.exists()) {
 			try {
 				FileWriter writer = new FileWriter(personFile,false);
@@ -132,341 +131,340 @@ public class FileIO {
 					writer.write("\nusername:" + profile.getUsername());
 				if(profile.getPassword() != null)
 					writer.write("\npassword:" + profile.getPassword());
-					if(profile.getMatchName() != null)
-						writer.write("\ngetMatchName:" + profile.getMatchName());
-					if(profile.getYearInSchool() != null)
-						writer.write("\nyearInSchool:" + profile.getYearInSchool());
-					try {
-						writer.write("\ndormChoices:" + profile.getDormChoices().get(0).toString()+"/"+profile.getDormChoices().get(1).toString()+"/"+profile.getDormChoices().get(2).toString());
-					}catch(NullPointerException e) {
-						System.out.println("Null Value");
-					}
-					writer.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+				if(profile.getMatchName() != null)
+					writer.write("\ngetMatchName:" + profile.getMatchName());
+				if(profile.getYearInSchool() != null)
+					writer.write("\nyearInSchool:" + profile.getYearInSchool());
+				try {
+					writer.write("\ndormChoices:" + profile.getDormChoices().get(0).toString()+"/"+profile.getDormChoices().get(1).toString()+"/"+profile.getDormChoices().get(2).toString());
+				}catch(NullPointerException e) {
 				}
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
+	}
 
-		//Returns profileList
-		public static ArrayList<Person> getProfiles(){
-			validatePersons();
-			return profileList;
-		}
+	//Returns profileList
+	public static ArrayList<Person> getProfiles(){
+		validatePersons();
+		return profileList;
+	}
 
-		//Returns clubList
-		public static ArrayList<Club> getClubs(){
-			validateClubs();
-			return clubList;
-		}
+	//Returns clubList
+	public static ArrayList<Club> getClubs(){
+		validateClubs();
+		return clubList;
+	}
 
-		//This method assigns values to the current club
-		private static void assignClubValues(Club club, String s) {
+	//This method assigns values to the current club
+	private static void assignClubValues(Club club, String s) {
 
-			try {
-				//name
-				if(s.contains("name:")) {
-					club.setName(s.substring(s.indexOf("name:")+"name:".length()));
-				}
-				if(s.contains("numMembers:")) {
-					club.setNumMembers(Integer.valueOf(s.substring(s.indexOf("numMembers:")+"numMembers:".length())));
-				}
-				if(s.contains("location:")) {
-					club.setLocation(s.substring(s.indexOf("location:")+"location:".length()));
-				}
-				if(s.contains("meetingTime:")) {
-					club.setMeetingTime(s.substring(s.indexOf("meetingTime:")+"meetingTime".length()));
-				}
-				if(s.contains("fees:")) {
-					club.setFees(s.substring(s.indexOf("fees:")+"fees:".length()));
-				}
-				if(s.contains("description:")) {
-					club.setDescription(s.substring(s.indexOf("description:")+"description:".length()));
-				}
-				if(s.contains("president:")) {
-					club.setPresident(s.substring(s.indexOf("president:")+"president:".length()));
-				}
-				if(s.contains("presPhone:")) {
-					club.setPresPhone(s.substring(s.indexOf("presPhone:")+"presPhone:".length()));
-				}
-				if(s.contains("presEmail:")) {
-					club.setPresEmail(s.substring(s.indexOf("presEmail:")+"presEmail:".length()));
-				}
-				if(s.contains("keywords:")) {
-					club.setKeyWords(new ArrayList<String>(Arrays.asList(s.substring(s.indexOf("keywords:")+"keywords:".length()).split("/"))));
-				}
-			}catch(Exception e) {
-				club.setName(null);
-			}
-
-		}
-
-
-		//This method assigns values to the current person from each profile
-		//Its just used to not clutter up the important parts too much
-		private static void assignPersonValues(Person person, String s) {
-
+		try {
 			//name
-			if(s.contains("name:") && !s.contains("username:")){
-				person.setName(s.substring(s.indexOf("name:")+"name:".length()));
+			if(s.contains("name:")) {
+				club.setName(s.substring(s.indexOf("name:")+"name:".length()));
 			}
-
-			//age
-			if(s.contains("age:")){
-				person.setAge(Integer.parseInt(s.substring(s.indexOf("age:")+"age:".length())));
+			if(s.contains("numMembers:")) {
+				club.setNumMembers(Integer.valueOf(s.substring(s.indexOf("numMembers:")+"numMembers:".length())));
 			}
-
-			//yearInSchool
-			if(s.contains("yearInSchool:")){
-				person.setYearInSchool(s.substring(s.indexOf("yearInSchool:")+"yearInSchool:".length()));
+			if(s.contains("location:")) {
+				club.setLocation(s.substring(s.indexOf("location:")+"location:".length()));
 			}
-
-			//dormChoices
-			if(s.contains("dormChoices:")){
-				String temp = s.substring(s.indexOf("dormChoices:")+"dormChoices:".length());
-				String[] tempArr = temp.split("/");
-				ArrayList<Dorms> dormList = new ArrayList<Dorms>();
-				Boolean flag = true;
-				for(String enumString : tempArr) {
-					try {
-						dormList.add(Enum.valueOf(Dorms.class, enumString));
-					}catch(Exception e) {
-						flag = !flag;
-						person.setDormChoices(null);
-						break;
-					}
-				}
-				if(flag) {
-					person.setDormChoices(dormList);
-				}
+			if(s.contains("meetingTime:")) {
+				club.setMeetingTime(s.substring(s.indexOf("meetingTime:")+"meetingTime".length()));
 			}
-
-			//major
-			if(s.contains("major:")){
-				person.setMajor(s.substring(s.indexOf("major:")+"major:".length()));
+			if(s.contains("fees:")) {
+				club.setFees(s.substring(s.indexOf("fees:")+"fees:".length()));
 			}
-
-			//username
-			if(s.contains("username:")) {
-				person.setUsername(s.substring(s.indexOf("username:")+"username:".length()));
+			if(s.contains("description:")) {
+				club.setDescription(s.substring(s.indexOf("description:")+"description:".length()));
 			}
-
-			//password
-			if(s.contains("password:")) {
-				person.setPassword(s.substring(s.indexOf("password:")+"password:".length()));
+			if(s.contains("president:")) {
+				club.setPresident(s.substring(s.indexOf("president:")+"president:".length()));
 			}
-
-			//email
-			if(s.contains("email:")) {
-				person.setEmail(s.substring(s.indexOf("email:")+"email:".length()));
+			if(s.contains("presPhone:")) {
+				club.setPresPhone(s.substring(s.indexOf("presPhone:")+"presPhone:".length()));
 			}
-
-			//gender
-			if(s.contains("gender:")){
-				String temp = s.substring(s.indexOf("gender:")+"gender:".length());
-				Boolean flag = true;
-				if(EnumSet.allOf(Gender.class).contains(Enum.valueOf(Gender.class, temp)))
-					person.setGender(Enum.valueOf(Gender.class, temp));
-				else {
-					person.setGender(null);
-
-				}
+			if(s.contains("presEmail:")) {
+				club.setPresEmail(s.substring(s.indexOf("presEmail:")+"presEmail:".length()));
 			}
-
-			//hobbies
-			if(s.contains("hobbies:")){
-				person.setHobbies(s.substring(s.indexOf("hobbies:")+"hobbies:".length()));
+			if(s.contains("keywords:")) {
+				club.setKeyWords(new ArrayList<String>(Arrays.asList(s.substring(s.indexOf("keywords:")+"keywords:".length()).split("/"))));
 			}
-
-			//petPeeves
-			if(s.contains("petPeeves:")) {
-				person.setPetPeeves(s.substring(s.indexOf("petPeeves:")+"petPeeves:".length()));
-			}
-
-			//roomatePreferences
-			if(s.contains("roomatePref:")) {
-				person.setRoommatePreferences(s.substring(s.indexOf("roomatePrefs:")+"roomatePrefs:".length()));
-			}
-
-			//rooamteDislikes
-			if(s.contains("roomateDislikes:")) {
-				person.setRoommateDislikes(s.substring(s.indexOf("roomateDislikes:")+"roomateDislikes:".length()));
-			}
-			if(s.contains("match:")) {
-				person.setMatchName(s.substring(s.indexOf("match:")+"match:".length()));
-			}
-		}
-
-		/* Makes sure that certain essential elements are part of each persons profile
-		 * These fields are: name , age , yearInSchool , username , password , email , gender
-		 * These fields are important because they are either required for the app to function as intended
-		 * In addition, profiles that are less complete will have lower scores
-		 * These scores will be used to help match users
-		 */
-
-		private static void validatePersons() {
-			for(int i = 0; i < profileList.size(); i++) {
-				if(profileList.get(i).getName() == null || profileList.get(i).getAge() == 0 || profileList.get(i).getYearInSchool() == null || profileList.get(i).getUsername() == null || profileList.get(i).getPassword() == null || profileList.get(i).getEmail() == null) {
-					profileList.remove(i);
-					i--;
-				}
-			}
-		}
-
-		private static void validateClubs() {
-			for(int i = 0; i < clubList.size(); i++) {
-				if(clubList.get(i).getName() == null || clubList.get(i).getDescription() == null || clubList.get(i).getLocation() == null || clubList.get(i).getMeetingTime() == null) {
-					clubList.remove(i);
-					i--;
-				}
-			}
-		}
-
-		public static String sendMessage(Person sender, Person recipient, String message) {
-			File senderMessageFile = new File("resources//profiles//"+sender.getName()+ "//" + recipient.getName()+".txt");
-			File recipientMessageFile = new File("resources//profiles//"+recipient.getName()+ "//" + sender.getName()+".txt");
-			if(senderMessageFile.exists()) {
-				write(senderMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
-			}
-			else {
-				try {
-					File messageFile = new File("resources//profiles//" + sender.getName()+"//messages.txt");
-					messageFile.createNewFile();
-					if(messageFile.exists()) {
-						write(messageFile,recipient.getName()+"\n",true);
-					}
-					senderMessageFile.createNewFile();
-					write(senderMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
-				} catch (IOException e) {
-					return "Error occured. Message not sent";
-				}
-			}
-			if(recipientMessageFile.exists()) {
-				write(recipientMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
-				return "Message Sent!";
-			}
-			else {
-				try {
-					File messageFile = new File("resources//profiles//" + recipient.getName()+"//messages.txt");
-					messageFile.createNewFile();
-					if(messageFile.exists()) {
-						write(messageFile,sender.getName()+"\n",true);
-					}
-					recipientMessageFile.createNewFile();
-					write(recipientMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
-					return "Message Sent!";
-				} catch (IOException e) {
-					return "Error occured. Message not sent";
-				}
-			}
-		}
-
-		//Prints out the list of messages that this user has with other users
-		//Prints out the name of the users this user has messages with
-		public static void viewMessages(Person p) {
-			File file = new File("resources//profiles//" + p.getName()+"//messages.txt");
-			if(file.exists()) {
-				try {
-					Scanner reader = new Scanner(file);
-					while(reader.hasNextLine()) {
-						System.out.println(reader.nextLine());
-					}
-					reader.close();
-				} catch (FileNotFoundException e) {
-					System.out.println("Could not find file");
-				}
-			}
-
-		}
-		public static void deleteFile(File file) {
-			if(file.exists()) {
-				if(file.isDirectory()) {
-					for(File f : file.listFiles()) {
-						deleteFile(f);
-					}
-				}
-				file.delete();
-			}
-		}
-		public static void deleteProfile(Person profile) {
-			String replacedName = profile.getName().replace(' ', '_');
-			deleteFile(new File("resources//profiles//"+replacedName));
-			try {
-				Scanner reader = new Scanner(personIdFile);
-				ArrayList<String> lines = new ArrayList<String>();
-				while(reader.hasNextLine()) {
-					String temp = reader.nextLine();
-					if(!temp.equals(replacedName)) {
-						lines.add(temp);
-					}
-				}
-				for(int i = profileList.size()-1; i >= 0; i--) {
-					if(profileList.get(i).getName().equals(profile.getName())) {
-						profileList.remove(i);
-					}
-				}
-				if(!new File("resources//profiles//"+replacedName).exists())
-					write(personIdFile, lines,false);
-			} catch (FileNotFoundException e) {
-			}
-
-		}
-
-		public static void getMessage(Person accessor, Person other) {
-			File messageFile = new File("resources//profiles//"+accessor.getName()+"//"+other.getName()+".txt");
-			if(messageFile.exists()) {
-				try {
-					Scanner messageReader = new Scanner(messageFile);
-					while(messageReader.hasNextLine()) {
-						String temp = messageReader.nextLine();
-						if(!temp.equals(""))
-							System.out.println(temp);
-					}
-					messageReader.close();
-				} catch (FileNotFoundException e) {
-					System.out.println("Could not find file.");
-				}
-			}
-		}
-
-		//Creates a profile for a new user
-		//Profile is created under the path "resources//profiles//name" folder, where name is the name of the new user
-		public static boolean createProfile(String username, String password, String name, String yearInSchool, String gender, int age, String email) {
-			String replacedName = name.replace(' ', '_');
-			createProfilesFolder();
-			File profileFolder = new File("resources//profiles//" + replacedName);
-			if(!profileFolder.exists())
-				profileFolder.mkdir();
-			File profileFile = new File("resources//profiles//"+replacedName+"//"+replacedName+".txt");
-			if(!profileFile.exists()) {
-				try {
-					profileFile.createNewFile();
-					String[] lines = {"name:"+name+"\n","username:"+username+"\n","password:"+password+"\n","yearInSchool:"+yearInSchool+"\n","age:"+age+"\n","email:"+email+"\n"};
-					write(profileFile,new ArrayList<String>(Arrays.asList(lines)));
-					write(personIdFile,replacedName+"\n",true);
-					return true;
-				} catch (IOException e) {
-					System.out.println("Could not create file");
-					return false;
-				}
-			}
-			else
-				return false;
-		}
-
-		public static void createMatch(Person user, Person match) {
-	
-			File profileFile = new File("resources//profiles//"+user.getName()+"//"+user.getName()+".txt");
-			if(profileFile.exists())
-				write(profileFile,"match:"+user.getName(),true);
-			else
-				System.out.println("Could not find file");
-		}
-		
-		private static void createProfilesFolder() {
-			File profilesFolder = new File("resources//profiles");
-			if(!profilesFolder.exists())
-				profilesFolder.mkdir();
+		}catch(Exception e) {
+			club.setName(null);
 		}
 
 	}
+
+
+	//This method assigns values to the current person from each profile
+	//Its just used to not clutter up the important parts too much
+	private static void assignPersonValues(Person person, String s) {
+
+		//name
+		if(s.contains("name:") && !s.contains("username:")){
+			person.setName(s.substring(s.indexOf("name:")+"name:".length()));
+		}
+
+		//age
+		if(s.contains("age:")){
+			person.setAge(Integer.parseInt(s.substring(s.indexOf("age:")+"age:".length())));
+		}
+
+		//yearInSchool
+		if(s.contains("yearInSchool:")){
+			person.setYearInSchool(s.substring(s.indexOf("yearInSchool:")+"yearInSchool:".length()));
+		}
+
+		//dormChoices
+		if(s.contains("dormChoices:")){
+			String temp = s.substring(s.indexOf("dormChoices:")+"dormChoices:".length());
+			String[] tempArr = temp.split("/");
+			ArrayList<Dorms> dormList = new ArrayList<Dorms>();
+			Boolean flag = true;
+			for(String enumString : tempArr) {
+				try {
+					dormList.add(Enum.valueOf(Dorms.class, enumString));
+				}catch(Exception e) {
+					flag = !flag;
+					person.setDormChoices(null);
+					break;
+				}
+			}
+			if(flag) {
+				person.setDormChoices(dormList);
+			}
+		}
+
+		//major
+		if(s.contains("major:")){
+			person.setMajor(s.substring(s.indexOf("major:")+"major:".length()));
+		}
+
+		//username
+		if(s.contains("username:")) {
+			person.setUsername(s.substring(s.indexOf("username:")+"username:".length()));
+		}
+
+		//password
+		if(s.contains("password:")) {
+			person.setPassword(s.substring(s.indexOf("password:")+"password:".length()));
+		}
+
+		//email
+		if(s.contains("email:")) {
+			person.setEmail(s.substring(s.indexOf("email:")+"email:".length()));
+		}
+
+		//gender
+		if(s.contains("gender:")){
+			String temp = s.substring(s.indexOf("gender:")+"gender:".length());
+			Boolean flag = true;
+			if(EnumSet.allOf(Gender.class).contains(Enum.valueOf(Gender.class, temp)))
+				person.setGender(Enum.valueOf(Gender.class, temp));
+			else {
+				person.setGender(null);
+
+			}
+		}
+
+		//hobbies
+		if(s.contains("hobbies:")){
+			person.setHobbies(s.substring(s.indexOf("hobbies:")+"hobbies:".length()));
+		}
+
+		//petPeeves
+		if(s.contains("petPeeves:")) {
+			person.setPetPeeves(s.substring(s.indexOf("petPeeves:")+"petPeeves:".length()));
+		}
+
+		//roomatePreferences
+		if(s.contains("roomatePref:")) {
+			person.setRoommatePreferences(s.substring(s.indexOf("roomatePrefs:")+"roomatePrefs:".length()));
+		}
+
+		//rooamteDislikes
+		if(s.contains("roomateDislikes:")) {
+			person.setRoommateDislikes(s.substring(s.indexOf("roomateDislikes:")+"roomateDislikes:".length()));
+		}
+		if(s.contains("match:")) {
+			person.setMatchName(s.substring(s.indexOf("match:")+"match:".length()));
+		}
+	}
+
+	/* Makes sure that certain essential elements are part of each persons profile
+	 * These fields are: name , age , yearInSchool , username , password , email , gender
+	 * These fields are important because they are either required for the app to function as intended
+	 * In addition, profiles that are less complete will have lower scores
+	 * These scores will be used to help match users
+	 */
+
+	private static void validatePersons() {
+		for(int i = 0; i < profileList.size(); i++) {
+			if(profileList.get(i).getName() == null || profileList.get(i).getAge() == 0 || profileList.get(i).getYearInSchool() == null || profileList.get(i).getUsername() == null || profileList.get(i).getPassword() == null || profileList.get(i).getEmail() == null) {
+				profileList.remove(i);
+				i--;
+			}
+		}
+	}
+
+	private static void validateClubs() {
+		for(int i = 0; i < clubList.size(); i++) {
+			if(clubList.get(i).getName() == null || clubList.get(i).getDescription() == null || clubList.get(i).getLocation() == null || clubList.get(i).getMeetingTime() == null) {
+				clubList.remove(i);
+				i--;
+			}
+		}
+	}
+
+	public static String sendMessage(Person sender, Person recipient, String message) {
+		File senderMessageFile = new File("resources//profiles//"+sender.getName()+ "//" + recipient.getName()+".txt");
+		File recipientMessageFile = new File("resources//profiles//"+recipient.getName()+ "//" + sender.getName()+".txt");
+		if(senderMessageFile.exists()) {
+			write(senderMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
+		}
+		else {
+			try {
+				File messageFile = new File("resources//profiles//" + sender.getName()+"//messages.txt");
+				messageFile.createNewFile();
+				if(messageFile.exists()) {
+					write(messageFile,recipient.getName()+"\n",true);
+				}
+				senderMessageFile.createNewFile();
+				write(senderMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
+			} catch (IOException e) {
+				return "Error occured. Message not sent";
+			}
+		}
+		if(recipientMessageFile.exists()) {
+			write(recipientMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
+			return "Message Sent!";
+		}
+		else {
+			try {
+				File messageFile = new File("resources//profiles//" + recipient.getName()+"//messages.txt");
+				messageFile.createNewFile();
+				if(messageFile.exists()) {
+					write(messageFile,sender.getName()+"\n",true);
+				}
+				recipientMessageFile.createNewFile();
+				write(recipientMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
+				return "Message Sent!";
+			} catch (IOException e) {
+				return "Error occured. Message not sent";
+			}
+		}
+	}
+
+	//Prints out the list of messages that this user has with other users
+	//Prints out the name of the users this user has messages with
+	public static void viewMessages(Person p) {
+		File file = new File("resources//profiles//" + p.getName()+"//messages.txt");
+		if(file.exists()) {
+			try {
+				Scanner reader = new Scanner(file);
+				while(reader.hasNextLine()) {
+					System.out.println(reader.nextLine());
+				}
+				reader.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("Could not find file");
+			}
+		}
+
+	}
+	public static void deleteFile(File file) {
+		if(file.exists()) {
+			if(file.isDirectory()) {
+				for(File f : file.listFiles()) {
+					deleteFile(f);
+				}
+			}
+			file.delete();
+		}
+	}
+	public static void deleteProfile(Person profile) {
+		String replacedName = profile.getName().replace(' ', '_');
+		deleteFile(new File("resources//profiles//"+replacedName));
+		try {
+			Scanner reader = new Scanner(personIdFile);
+			ArrayList<String> lines = new ArrayList<String>();
+			while(reader.hasNextLine()) {
+				String temp = reader.nextLine();
+				if(!temp.equals(replacedName)) {
+					lines.add(temp);
+				}
+			}
+			for(int i = profileList.size()-1; i >= 0; i--) {
+				if(profileList.get(i).getName().equals(profile.getName())) {
+					profileList.remove(i);
+				}
+			}
+			if(!new File("resources//profiles//"+replacedName).exists())
+				write(personIdFile, lines,false);
+		} catch (FileNotFoundException e) {
+		}
+
+	}
+
+	public static void getMessage(Person accessor, Person other) {
+		File messageFile = new File("resources//profiles//"+accessor.getName()+"//"+other.getName()+".txt");
+		if(messageFile.exists()) {
+			try {
+				Scanner messageReader = new Scanner(messageFile);
+				while(messageReader.hasNextLine()) {
+					String temp = messageReader.nextLine();
+					if(!temp.equals(""))
+						System.out.println(temp);
+				}
+				messageReader.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("Could not find file.");
+			}
+		}
+	}
+
+	//Creates a profile for a new user
+	//Profile is created under the path "resources//profiles//name" folder, where name is the name of the new user
+	public static boolean createProfile(String username, String password, String name, String yearInSchool, String gender, int age, String email) {
+		String replacedName = name.replace(' ', '_');
+		createProfilesFolder();
+		File profileFolder = new File("resources//profiles//" + replacedName);
+		if(!profileFolder.exists())
+			profileFolder.mkdir();
+		File profileFile = new File("resources//profiles//"+replacedName+"//"+replacedName+".txt");
+		if(!profileFile.exists()) {
+			try {
+				profileFile.createNewFile();
+				String[] lines = {"name:"+name+"\n","username:"+username+"\n","password:"+password+"\n","yearInSchool:"+yearInSchool+"\n","age:"+age+"\n","email:"+email+"\n"};
+				write(profileFile,new ArrayList<String>(Arrays.asList(lines)));
+				write(personIdFile,replacedName+"\n",true);
+				return true;
+			} catch (IOException e) {
+				System.out.println("Could not create file");
+				return false;
+			}
+		}
+		else
+			return false;
+	}
+
+	public static void createMatch(Person user, Person match) {
+
+		File profileFile = new File("resources//profiles//"+user.getName()+"//"+user.getName()+".txt");
+		if(profileFile.exists())
+			write(profileFile,"match:"+user.getName(),true);
+		else
+			System.out.println("Could not find file");
+	}
+
+	private static void createProfilesFolder() {
+		File profilesFolder = new File("resources//profiles");
+		if(!profilesFolder.exists())
+			profilesFolder.mkdir();
+	}
+
+}
