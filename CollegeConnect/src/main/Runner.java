@@ -231,7 +231,10 @@ public class Runner {
 		Scanner input = new Scanner(System.in);
 
 		System.out.println("What would you like to change?");
-		System.out.println("1.  Name");
+		
+		//Currently changing your name breaks the program, to be fixed at a later dat
+		//System.out.println("1.  Name");
+		
 		System.out.println("2.  Age");
 		System.out.println("3.  Gender");
 		System.out.println("4.  Year in School");
@@ -246,6 +249,11 @@ public class Runner {
 		input.nextLine();
 		//this switch takes the users input and runs a block of code to list what a current value is, and then gives you the option to change it
 		switch(choice) {
+		
+		
+		//Currently changing your name breaks the program, to be fixed at a later date
+		
+		/*
 		case 1:  
 			System.out.println("Current name is:  " + profile.getName());
 			System.out.print("Change name to:  ");
@@ -253,18 +261,37 @@ public class Runner {
 			profile.setName(name);
 			lines.add("name:" + profile.getName());
 			break;
+			*/
+		
+		//this case allows the user to input a new age to set their account information too.
 		case 2:
 			System.out.println("Current age is:  " + profile.getAge());
 			System.out.print("Change age to:  ");
-			int age = input.nextInt();
+			String age = input.nextLine();
+			
+			//This loop is our new input validation that ensures the input is a valid age and contains no symbols or letters.
+			
+			while(!(age.matches("[0-9]+") && age.length() == 2)) {
+				System.out.print("Sorry age cannot contain letters and must be between 10 - 99.  Try again:  ");
+				age = input.nextLine();
+			}
+			int age2 = Integer.parseInt(age);
+			
+			//This was the old input validation to check for age, however it didn't account for strings so it's been removed.
+			
 			//loops until the user enters a valid value from 1-100
-			while(age < 0 || age > 100) {
+			/*
+			while(age2 < 0 || age2 > 100) {
 				System.out.println("Not a valid age.  Age range 1-100");
 				age = input.nextInt();
 			}
-			profile.setAge(age);
+			*/
+			
+			profile.setAge(age2);
 			lines.add("age:" + profile.getAge());
 			break;
+			
+			
 		case 3:
 			System.out.println("Current gender is:  " + profile.getGender());
 			System.out.print("Change gender to:  ");
@@ -274,12 +301,17 @@ public class Runner {
 				genderEnum = Gender.valueOf(gender.toLowerCase());
 			}catch(Exception e) {
 				System.out.println("Not a valid option for gender, Use male, female, or other.");
+				return;
 			}
 			if(genderEnum != null)
-				profile.setGender(genderEnum);
+				genderEnum = Gender.valueOf(gender.toLowerCase());
+			lines.add("gender:" + profile.getGender());
+			
+			/*
 			else
 				System.out.println("Not a valid option for gender, Use male, female, or other.");
-			lines.add("gender:" + profile.getGender());
+			*/
+			
 			break;
 		case 4:
 			System.out.println("Current Year is :  " + profile.getYearInSchool());
@@ -336,8 +368,7 @@ public class Runner {
 			}
 			System.out.print("(Enter one dorm name at a time)/nChange dorms to:  ");
 			String dorm = input.nextLine();
-			//temporary solution for now, still don't know what to do for arrayList casting here
-			//I need to input the user inputed string into the arrayList at index i, however since its an enum without an assigned string I literally can't
+			
 			String temp = "dormChoices:";
 			for(int i = 0; i < 3; i ++) {
 				while(true) {
@@ -420,12 +451,31 @@ public class Runner {
 		String yearInSchool = input.nextLine();
 		System.out.print("Enter Gender:  ");
 		String gender = input.nextLine();
+		Gender genderEnum = null;
+		try {
+			genderEnum = Gender.valueOf(gender.toLowerCase());
+		}catch(Exception e) {
+			System.out.println("Not a valid option for gender, Use male, female, or other.");
+			System.out.println("TERMINATING PROGRAM.  INCORRECT ANSWER.");
+			System.exit(0);
+		}
+		if(genderEnum != null)
+			genderEnum = Gender.valueOf(gender.toLowerCase());
 		System.out.print("Enter age:  ");
-		int age = input.nextInt();
+		String age = input.nextLine();
+		while(!(age.matches("[0-9]+") && age.length() == 2)) {
+			System.out.print("Sorry age cannot contain letters and must be between 10 - 99.  Try again:  ");
+			age = input.nextLine();
+		}
+		int age2 = Integer.parseInt(age);
+		
+		
+		
+		
 		input.nextLine();
 		System.out.print("Enter email:  ");
 		String email = input.nextLine();
-		if(FileIO.createProfile(username, password, name, yearInSchool, gender, age, email)) 
+		if(FileIO.createProfile(username, password, name, yearInSchool, gender, age2, email)) 
 			System.out.println("Profile Created!");
 		else {
 			System.out.println("Profile already exists or there was an error creating the profile.");
