@@ -321,14 +321,14 @@ public class FileIO {
 	}
 
 	public static String sendMessage(Person sender, Person recipient, String message) {
-		File senderMessageFile = new File("resources//profiles//"+sender.getName()+ "//" + recipient.getName()+".txt");
-		File recipientMessageFile = new File("resources//profiles//"+recipient.getName()+ "//" + sender.getName()+".txt");
+		File senderMessageFile = new File("resources//profiles//"+sender.getName().replace(" ", "_") + "//" + recipient.getName().replace(" ", "_")+".txt");
+		File recipientMessageFile = new File("resources//profiles//"+recipient.getName().replace(" ", "_")+ "//" + sender.getName().replace(" ", "_")+".txt");
 		if(senderMessageFile.exists()) {
 			write(senderMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
 		}
 		else {
 			try {
-				File messageFile = new File("resources//profiles//" + sender.getName()+"//messages.txt");
+				File messageFile = new File("resources//profiles//" + sender.getName().replace(" ", "_")+"//messages.txt");
 				messageFile.createNewFile();
 				if(messageFile.exists()) {
 					write(messageFile,recipient.getName()+"\n",true);
@@ -345,7 +345,7 @@ public class FileIO {
 		}
 		else {
 			try {
-				File messageFile = new File("resources//profiles//" + recipient.getName()+"//messages.txt");
+				File messageFile = new File("resources//profiles//" + recipient.getName().replace(" ", "_")+"//messages.txt");
 				messageFile.createNewFile();
 				if(messageFile.exists()) {
 					write(messageFile,sender.getName()+"\n",true);
@@ -439,7 +439,7 @@ public class FileIO {
 		if(!profileFile.exists()) {
 			try {
 				profileFile.createNewFile();
-				String[] lines = {"name:"+name+"\n","username:"+username+"\n","password:"+password+"\n","yearInSchool:"+yearInSchool+"\n","age:"+age+"\n","email:"+email+"\n"};
+				String[] lines = {"name:"+name+"\n","username:"+username+"\n","password:"+password+"\n","yearInSchool:"+yearInSchool+"\n","gender:"+gender+"\n","age:"+age+"\n","email:"+email+"\n"};
 				write(profileFile,new ArrayList<String>(Arrays.asList(lines)));
 				write(personIdFile,replacedName+"\n",true);
 				return true;
@@ -454,9 +454,9 @@ public class FileIO {
 
 	public static void createMatch(Person user, Person match) {
 
-		File profileFile = new File("resources//profiles//"+user.getName()+"//"+user.getName()+".txt");
+		File profileFile = new File("resources//profiles//"+user.getName().replace(" ", "_")+"//"+user.getName().replace(" ", "_")+".txt");
 		if(profileFile.exists())
-			write(profileFile,"match:"+user.getName(),true);
+			write(profileFile,"match:"+match.getName(),true);
 		else
 			System.out.println("Could not find file");
 	}
