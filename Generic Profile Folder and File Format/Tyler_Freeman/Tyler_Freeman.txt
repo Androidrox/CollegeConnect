@@ -1,0 +1,15 @@
+Below is an example of a created profile stored as a file.
+
+--------------------------------------------------
+
+name:Tyler Freeman
+
+username:FreeTyl
+
+password:L12232t28
+
+yearInSchool:Freshman
+
+age:18
+
+email:Freemanty@uwplatt.edu

@@ -1,0 +1,7 @@
+
+name:Firstname Lastname
+age: (any integer value between 10-99)
+email:(any string)
+username: (any string)
+password: (any string)
+yearInSchool: (any string)
