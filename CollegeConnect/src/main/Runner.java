@@ -9,7 +9,6 @@ public class Runner {
 		FileIO.startUp();
 		FileIO.readPersons();
 		FileIO.readClubs();
-		System.out.println(FileIO.getClubs().get(0).getKeyWords());
 
 		Scanner input = new Scanner(System.in);
 		//the loggedIn integer is set to -1 as arrays have an index at 0.  
@@ -21,7 +20,7 @@ public class Runner {
 			createProfile();
 			FileIO.readPersons();
 		}
-	
+
 		//This while loop runs the logIn() method and stops looping if the returned index is greater than -1.
 		while(loggedIn < 0) {
 			loggedIn = logIn();
@@ -29,46 +28,53 @@ public class Runner {
 				System.out.println("Incorrect Username or Password!\n");
 		}
 
+
+		String choiceS = "";
 		int choice = 0;
 		//this while loop will continue to loop through the main method until you input a valid variable.  Entering 6 terminates the program.
 		while(choice != 6) {
 			mainMenu();
-			choice = input.nextInt();
-			if(choice > 0 && choice < 6) {
-				switch(choice) {
-				//this switch has an option for each choice in the mainMenu() method, and it will do whatever each line explains e.g. editInformation() edits information
-				case 1:
-					Person match = matchPeoples(FileIO.getProfiles().get(loggedIn));
-					if(match != null) {
-						FileIO.createMatch(FileIO.getProfiles().get(loggedIn),match);
-						FileIO.sendMessage(FileIO.getProfiles().get(loggedIn), match, privateMessage(match));
+			choiceS = input.nextLine();
+			try {
+				choice = Integer.parseInt(choiceS);
+				if(choice > 0 && choice < 6) {
+					switch(choice) {
+					//this switch has an option for each choice in the mainMenu() method, and it will do whatever each line explains e.g. editInformation() edits information
+					case 1:
+						Person match = matchPeoples(FileIO.getProfiles().get(loggedIn));
+						if(match != null) {
+							FileIO.createMatch(FileIO.getProfiles().get(loggedIn),match);
+							FileIO.sendMessage(FileIO.getProfiles().get(loggedIn), match, privateMessage(match));
+						}
+						break;
+					case 2:
+						//calls the editInformation method to change a profiles info.  It's also used to add info that you don't add right away e.g. major, dorm choices, etc.
+						editInformation(FileIO.getProfiles().get(loggedIn));
+						break;
+					case 3:
+						//this method is used to find clubs from a club file, club files need to be manually added.
+						findClub();
+						break;
+					case 4:
+						//this method is used to remove a profile from the program
+						//should be changed to "double check" that the user wants to delete their profile
+						deleteProfile(FileIO.getProfiles().get(loggedIn));
+						break;
+					case 5:
+						//should allow the user to view messages from other profiles
+						viewMessages();
 					}
-					break;
-				case 2:
-					//calls the editInformation method to change a profiles info.  It's also used to add info that you don't add right away e.g. major, dorm choices, etc.
-					editInformation(FileIO.getProfiles().get(loggedIn));
-					break;
-				case 3:
-					//this method is used to find clubs from a club file, club files need to be manually added.
-					findClub();
-					break;
-				case 4:
-					//this method is used to remove a profile from the program
-					//should be changed to "double check" that the user wants to delete their profile
-					deleteProfile(FileIO.getProfiles().get(loggedIn));
-					break;
-				case 5:
-					//should allow the user to view messages from other profiles
-					viewMessages();
 				}
-			}
-			else if(choice == 6) {
-				System.out.println("\n---------------");
-				System.out.println("Exiting program");
-				System.out.println("---------------");
-			}
-			else
-			{
+				else if(choice == 6) {
+					System.out.println("\n---------------");
+					System.out.println("Exiting program");
+					System.out.println("---------------");
+				}
+				else
+				{
+					System.out.println("Incorrect Input.  Try again!");
+				}
+			}catch(Exception e) {
 				System.out.println("Incorrect Input.  Try again!");
 			}
 		}
@@ -87,7 +93,7 @@ public class Runner {
 			String choice = "";
 			//A temp array is made with all possible candidates for the user (people of the same gender, and not their own profile)
 			ArrayList<Person> tempArray = new ArrayList<Person>();
-			
+
 			//this for loop assigns the profiles to the temoArray
 			for(int i = 0; i < FileIO.getProfiles().size(); i++) {
 				//checks to see if a profile isn't a duplicate or of another gender; adds it to the arraylist if it isn't
@@ -218,7 +224,8 @@ public class Runner {
 		ArrayList<String> lines = new ArrayList<String>();
 
 		Scanner input = new Scanner(System.in);
-
+		String choiceS = "";
+		int choice = 0;
 		System.out.println("What would you like to change?");
 
 		//Currently changing your name breaks the program, to be fixed at a later date
@@ -233,9 +240,25 @@ public class Runner {
 		System.out.println("8.  Roommate Preferences");
 		System.out.println("9.  Roommate Dislikes");
 		System.out.println("10.  Dorm Choices");
+		choiceS = input.nextLine();
+		//eventually change this so choice <= 0 once change name is fixed
+		while(choice <= 1 || choice >= 11) {
+			try {
+				choice = Integer.parseInt(choiceS);
+				if(choice <= 1 || choice >= 11) {
+					System.out.println("Not a valid input.  Make sure the input is 2-10 only!  Try again:  ");
+					choiceS = input.nextLine();
+				}
+
+			}catch(Exception e) {
+				System.out.print("Not a valid input.  Make sure the input is 2-10 only!  Try again:  ");
+				choiceS = input.nextLine();
+			}
+		}
+
 		//eventually set this up for a string and then check if its an int, if it is run, if it isn't return an error and return to main method
-		int choice = input.nextInt();
-		input.nextLine();
+
+
 		//this switch takes the users input and runs a block of code to list what a current value is, and then gives you the option to change it
 		switch(choice) {
 
@@ -385,7 +408,7 @@ public class Runner {
 					break;
 				}
 				if(i != 2)
-				dorm = input.nextLine();
+					dorm = input.nextLine();
 			}
 			lines.add(temp);
 		}
@@ -423,24 +446,34 @@ public class Runner {
 			for(int i = 0; i < tempClubs.size(); i++) {
 				System.out.println((i+1) + ".  " + tempClubs.get(i).getName());
 			}
-			int choice = input.nextInt()-1;
 
-			if(choice < tempClubs.size() && choice+1 > 0) {
-				System.out.println("Club name:  " + tempClubs.get(choice).getName());
-				System.out.println("Club Description:  " + tempClubs.get(choice).getDescription());
-				System.out.println("Number of members:  " + tempClubs.get(choice).getNumMembers());
-				System.out.println("Fees:  $" + tempClubs.get(choice).getFees());
-				System.out.println("Location:  " + tempClubs.get(choice).getLocation());
-				System.out.println("Meeting Time:  " + tempClubs.get(choice).getMeetingTime());
-				System.out.println("Club President:  " + tempClubs.get(choice).getPresident());
-				System.out.println("Presidents Email:  " + tempClubs.get(choice).getPresEmail());
-				System.out.println("Presidents Phone Number:  " + tempClubs.get(choice).getPresPhone());		
-			}
-			else
-			{
-				System.out.println("Invalid answer.");
-			}
 
+			String choiceS = input.nextLine();
+
+			int choice = 0;
+
+			while(choice < 1 || choice > tempClubs.size()-1) {
+				try {
+					choice = Integer.parseInt(choiceS);
+					if(choice < 0 || choice> tempClubs.size()-1) {
+						System.out.print("Not a valid input.  Make sure the input is 1-" + tempClubs.size() + " only!  Try again:  ");
+						choiceS = input.nextLine();
+					}
+
+				}catch(Exception e) {
+					System.out.print("Not a valid input.  Make sure the input is 1-" + tempClubs.size() + " only!  Try again:  ");
+					choiceS = input.nextLine();
+				}
+			}
+			System.out.println("Club name:  " + tempClubs.get(choice).getName());
+			System.out.println("Club Description:  " + tempClubs.get(choice).getDescription());
+			System.out.println("Number of members:  " + tempClubs.get(choice).getNumMembers());
+			System.out.println("Fees:  $" + tempClubs.get(choice).getFees());
+			System.out.println("Location:  " + tempClubs.get(choice).getLocation());
+			System.out.println("Meeting Time:  " + tempClubs.get(choice).getMeetingTime());
+			System.out.println("Club President:  " + tempClubs.get(choice).getPresident());
+			System.out.println("Presidents Email:  " + tempClubs.get(choice).getPresEmail());
+			System.out.println("Presidents Phone Number:  " + tempClubs.get(choice).getPresPhone());		
 		}
 	}
 
