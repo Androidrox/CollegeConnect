@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+//This class alows us to create a user and allow them to repond to question to add to there profile
 
 public class Person {
     int ID, age;
@@ -8,7 +9,7 @@ public class Person {
     String hobbies, petPeeves, roommatePreferences, roommateDislikes;
     ArrayList<Dorms> dormChoices;
     Gender gender;
-
+//Allows us to get basic information
     public String getName() {
         return name;
     }
@@ -36,7 +37,7 @@ public class Person {
     public void setDormChoices(ArrayList<Dorms> dormChoices){
     	this.dormChoices = dormChoices;
     }
-
+// This also allows them to enter more peronsal information to help match students
     public String getMajor(){
         return major;
     }
@@ -78,7 +79,7 @@ public class Person {
     public void setRoommateDislikes(String roomateDislikes){
         this.roommateDislikes = roomateDislikes;
     }
-
+//Thsi create there profile so they can log in and out of the program
     public String getEmail(){
         return email;
     }
