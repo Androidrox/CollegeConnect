@@ -128,16 +128,11 @@ public class Club {
    // returns true if keyword matches and false
    // if it doesn't
    public boolean hasKeyword(String keyword){
-      boolean found = false;
       for(int i = 0; i < keyWords.size(); i++)
       {
-         if(keyWords.get(i) == keyword)
-            found = true;
+         if(keyWords.get(i).equals(keyword))
+            return true;
       }
-      if (found == true)
-         return true;
-
-      else
-         return false;
+      return false;
    }
 }

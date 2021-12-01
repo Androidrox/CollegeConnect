@@ -6,7 +6,10 @@ public class Runner {
 
 	private static int loggedIn = -1;
 	public static void main(String[] args) {
-
+		FileIO.startUp();
+		FileIO.readPersons();
+		FileIO.readClubs();
+		System.out.println(FileIO.getClubs().get(0).getKeyWords());
 
 		Scanner input = new Scanner(System.in);
 		//the loggedIn integer is set to -1 as arrays have an index at 0.  
@@ -18,8 +21,7 @@ public class Runner {
 			createProfile();
 			FileIO.readPersons();
 		}
-		FileIO.readPersons();
-		FileIO.readClubs();
+	
 		//This while loop runs the logIn() method and stops looping if the returned index is greater than -1.
 		while(loggedIn < 0) {
 			loggedIn = logIn();
@@ -348,6 +350,10 @@ public class Runner {
 
 			try {
 				for(int i = 0; i < dorms.size(); i++) {
+					if(dorms.get(i) == null) {
+						System.out.println("It seems you don't have any dorms seletected yet.");
+						break;
+					}
 					if(i == dorms.size()-1)
 						System.out.println(dorms.get(i));
 					else
@@ -357,25 +363,28 @@ public class Runner {
 			}catch(Exception e) {
 				System.out.println("It seems you don't have any dorms seletected yet.");
 			}
-			System.out.print("(Enter one dorm name at a time)/nChange dorms to:  ");
+			System.out.print("(Enter one dorm name at a time)\nChange dorms to:  ");
 			String dorm = input.nextLine();
 
 			String temp = "dormChoices:";
 			for(int i = 0; i < 3; i ++) {
+				//System.out.println(i);
 				while(true) {
+					//System.out.println("i=" + i);
 					try {
 						dorms.set(i,Enum.valueOf(Dorms.class, dorm));
 						if(i != 2)
 							temp += dorm + "/";
 						else
 							temp += dorm;
-					} catch(Exception e) {
+					} catch(IllegalArgumentException e) {
 						System.out.print("Error.  Not a valid option.");
-						i--;
+						//i--;
 						continue;
 					}
 					break;
 				}
+				if(i != 2)
 				dorm = input.nextLine();
 			}
 			lines.add(temp);
@@ -416,16 +425,16 @@ public class Runner {
 			}
 			int choice = input.nextInt()-1;
 
-			if(choice < tempClubs.size() && choice > 0) {
-				System.out.println("Club name:  " + tempClubs.get(choice).getName() + "\n");
-				System.out.println("Club Description:  " + tempClubs.get(choice).getDescription() + "\n");
-				System.out.println("Number of members:  " + tempClubs.get(choice).getNumMembers() + "\n");
-				System.out.println("Fees:  $" + tempClubs.get(choice).getFees() + "\n");
-				System.out.println("Location:  " + tempClubs.get(choice).getLocation() + "\n");
-				System.out.println("Meeting Time:  " + tempClubs.get(choice).getMeetingTime() + "\n");
-				System.out.println("Club President:  " + tempClubs.get(choice).getPresident() + "\n");
-				System.out.println("Presidents Email:  " + tempClubs.get(choice).getPresEmail() + "\n");
-				System.out.println("Presidents Phone Number:  " + tempClubs.get(choice).getPresPhone() + "\n");		
+			if(choice < tempClubs.size() && choice+1 > 0) {
+				System.out.println("Club name:  " + tempClubs.get(choice).getName());
+				System.out.println("Club Description:  " + tempClubs.get(choice).getDescription());
+				System.out.println("Number of members:  " + tempClubs.get(choice).getNumMembers());
+				System.out.println("Fees:  $" + tempClubs.get(choice).getFees());
+				System.out.println("Location:  " + tempClubs.get(choice).getLocation());
+				System.out.println("Meeting Time:  " + tempClubs.get(choice).getMeetingTime());
+				System.out.println("Club President:  " + tempClubs.get(choice).getPresident());
+				System.out.println("Presidents Email:  " + tempClubs.get(choice).getPresEmail());
+				System.out.println("Presidents Phone Number:  " + tempClubs.get(choice).getPresPhone());		
 			}
 			else
 			{
@@ -485,7 +494,7 @@ public class Runner {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Here are your messages.");
 		//method needs to be made
-		FileIO.viewMessages();
+		FileIO.viewMessages(FileIO.getProfiles().get(loggedIn));
 		System.out.println("Enter the name of the person you'd like to see messages from.");
 		String choice = "";
 		//This loops through the messages that have been sent to you from a certain user, and then it allows the user to return a message
@@ -493,7 +502,7 @@ public class Runner {
 			choice = scan.nextLine();
 			for(int i = 0; i < FileIO.getProfiles().size(); i++) {
 				if(choice.equals(FileIO.getProfiles().get(i).getName())) {
-					FileIO.viewMessages(FileIO.getProfiles().get(i));
+					FileIO.getMessage(FileIO.getProfiles().get(loggedIn), FileIO.getProfiles().get(i));
 					System.out.println("\nWould you like to send the viewer a new message (y/n)");
 					choice = scan.nextLine();
 					if(choice.equalsIgnoreCase("y")){

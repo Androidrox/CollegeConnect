@@ -20,8 +20,9 @@ import java.util.Scanner;
  */
 public class FileIO {
 	//File locations for the two ids lists
-	private static File personIdFile = new File("resources//personIdFile.txt");
-	private static File clubIdFile = new File("resources//clubIdFile.txt");
+	private static final String absolutePath = System.getenv("APPDATA") + "\\CollegeConnect\\resources";
+	private static File personIdFile = new File(System.getenv("APPDATA") + "\\CollegeConnect\\resources\\personIdFile.txt");
+	private static File clubIdFile = new File(absolutePath+"\\clubIdFile.txt");
 
 	//ArrayLists to store the profiles and clubs
 	private static ArrayList<Person> profileList = new ArrayList<Person>();
@@ -38,7 +39,7 @@ public class FileIO {
 				String temp = personIdReader.nextLine();
 				if(temp.equals(""))
 					continue;
-				File profileFile = new File("resources//profiles//" + temp +"//" + temp +".txt");
+				File profileFile = new File(absolutePath +"//profiles//" + temp +"//" + temp +".txt");
 				if(profileFile.exists()) {
 					Scanner profileReader = new Scanner(profileFile);
 					Person tempPerson = new Person();
@@ -66,7 +67,8 @@ public class FileIO {
 
 			//Goes through each entry in the clubIdFile and then accesses the file with the id name that it reads
 			while(clubIdReader.hasNext()) {
-				Scanner clubReader = new Scanner(new File("resources//clubs//" + clubIdReader.next()));
+				String temp = clubIdReader.next();
+				Scanner clubReader = new Scanner(new File(absolutePath+"\\clubs\\" + temp +"\\" + temp +".txt"));
 				clubReader.useDelimiter("//");
 				Club tempClub = new Club();
 				while(clubReader.hasNextLine()) {
@@ -106,8 +108,9 @@ public class FileIO {
 		}
 	}
 
+	//
 	public static void write(Person profile, ArrayList<String> lines, boolean append) {
-		File personFile = new File("resources//profiles//"+ profile.getName().replace(" ", "_") + "//" + profile.getName().replace(" ", "_")+".txt");
+		File personFile = new File(absolutePath +"//profiles//"+ profile.getName().replace(" ", "_") + "//" + profile.getName().replace(" ", "_")+".txt");
 		if(personFile.exists()) {
 			try {
 				FileWriter writer = new FileWriter(personFile,false);
@@ -230,7 +233,7 @@ public class FileIO {
 					dormList.add(Enum.valueOf(Dorms.class, enumString));
 				}catch(Exception e) {
 					flag = !flag;
-					person.setDormChoices(null);
+					person.setDormChoices(new ArrayList<Dorms>(3));
 					break;
 				}
 			}
@@ -293,6 +296,11 @@ public class FileIO {
 		if(s.contains("match:")) {
 			person.setMatchName(s.substring(s.indexOf("match:")+"match:".length()));
 		}
+		if(person.getDormChoices() == null) {
+			Dorms[] dorms = {null,null,null};
+			person.setDormChoices(new ArrayList<Dorms>(Arrays.asList(dorms)));
+			person.getDormChoices().ensureCapacity(3);
+		}
 	}
 
 	/* Makes sure that certain essential elements are part of each persons profile
@@ -321,14 +329,16 @@ public class FileIO {
 	}
 
 	public static String sendMessage(Person sender, Person recipient, String message) {
-		File senderMessageFile = new File("resources//profiles//"+sender.getName().replace(" ", "_") + "//" + recipient.getName().replace(" ", "_")+".txt");
-		File recipientMessageFile = new File("resources//profiles//"+recipient.getName().replace(" ", "_")+ "//" + sender.getName().replace(" ", "_")+".txt");
+		if(message == null)
+			return "";
+		File senderMessageFile = new File(absolutePath+"//profiles//"+sender.getName().replace(" ", "_") + "//" + recipient.getName().replace(" ", "_")+".txt");
+		File recipientMessageFile = new File(absolutePath+"//profiles//"+recipient.getName().replace(" ", "_")+ "//" + sender.getName().replace(" ", "_")+".txt");
 		if(senderMessageFile.exists()) {
 			write(senderMessageFile,"["+LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))+" " + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE)+"] " + sender.getName() + ": " + message+"\n", true);
 		}
 		else {
 			try {
-				File messageFile = new File("resources//profiles//" + sender.getName().replace(" ", "_")+"//messages.txt");
+				File messageFile = new File(absolutePath+"//profiles//" + sender.getName().replace(" ", "_")+"//messages.txt");
 				messageFile.createNewFile();
 				if(messageFile.exists()) {
 					write(messageFile,recipient.getName()+"\n",true);
@@ -345,7 +355,7 @@ public class FileIO {
 		}
 		else {
 			try {
-				File messageFile = new File("resources//profiles//" + recipient.getName().replace(" ", "_")+"//messages.txt");
+				File messageFile = new File(absolutePath+"//profiles//" + recipient.getName().replace(" ", "_")+"//messages.txt");
 				messageFile.createNewFile();
 				if(messageFile.exists()) {
 					write(messageFile,sender.getName()+"\n",true);
@@ -362,7 +372,7 @@ public class FileIO {
 	//Prints out the list of messages that this user has with other users
 	//Prints out the name of the users this user has messages with
 	public static void viewMessages(Person p) {
-		File file = new File("resources//profiles//" + p.getName()+"//messages.txt");
+		File file = new File(absolutePath+"//profiles//" + p.getName()+"//messages.txt");
 		if(file.exists()) {
 			try {
 				Scanner reader = new Scanner(file);
@@ -388,7 +398,7 @@ public class FileIO {
 	}
 	public static void deleteProfile(Person profile) {
 		String replacedName = profile.getName().replace(' ', '_');
-		deleteFile(new File("resources//profiles//"+replacedName));
+		deleteFile(new File(absolutePath+"//profiles//"+replacedName));
 		try {
 			Scanner reader = new Scanner(personIdFile);
 			ArrayList<String> lines = new ArrayList<String>();
@@ -403,7 +413,7 @@ public class FileIO {
 					profileList.remove(i);
 				}
 			}
-			if(!new File("resources//profiles//"+replacedName).exists())
+			if(!new File(absolutePath+"//profiles//"+replacedName).exists())
 				write(personIdFile, lines,false);
 		} catch (FileNotFoundException e) {
 		}
@@ -411,7 +421,7 @@ public class FileIO {
 	}
 
 	public static void getMessage(Person accessor, Person other) {
-		File messageFile = new File("resources//profiles//"+accessor.getName()+"//"+other.getName()+".txt");
+		File messageFile = new File(absolutePath+"//profiles//"+accessor.getName()+"//"+other.getName().replace(" ", "_")+".txt");
 		if(messageFile.exists()) {
 			try {
 				Scanner messageReader = new Scanner(messageFile);
@@ -432,10 +442,10 @@ public class FileIO {
 	public static boolean createProfile(String username, String password, String name, String yearInSchool, String gender, int age, String email) {
 		String replacedName = name.replace(' ', '_');
 		createProfilesFolder();
-		File profileFolder = new File("resources//profiles//" + replacedName);
+		File profileFolder = new File(absolutePath+"//profiles//" + replacedName);
 		if(!profileFolder.exists())
 			profileFolder.mkdir();
-		File profileFile = new File("resources//profiles//"+replacedName+"//"+replacedName+".txt");
+		File profileFile = new File(absolutePath+"//profiles//"+replacedName+"//"+replacedName+".txt");
 		if(!profileFile.exists()) {
 			try {
 				profileFile.createNewFile();
@@ -454,7 +464,7 @@ public class FileIO {
 
 	public static void createMatch(Person user, Person match) {
 
-		File profileFile = new File("resources//profiles//"+user.getName().replace(" ", "_")+"//"+user.getName().replace(" ", "_")+".txt");
+		File profileFile = new File(absolutePath+"//profiles//"+user.getName().replace(" ", "_")+"//"+user.getName().replace(" ", "_")+".txt");
 		if(profileFile.exists())
 			write(profileFile,"match:"+match.getName(),true);
 		else
@@ -462,9 +472,32 @@ public class FileIO {
 	}
 
 	private static void createProfilesFolder() {
-		File profilesFolder = new File("resources//profiles");
+		File profilesFolder = new File(absolutePath+"//profiles");
 		if(!profilesFolder.exists())
 			profilesFolder.mkdir();
 	}
+	
+	//Creates necessary files and folders for the start of the program if they do not already exist
+	public static void startUp() {
+		try {
+		//Creates folder under "AppData/Roaming/CollegeConnect
+		if(!(new File(System.getenv("APPDATA")+"//CollegeConnect").exists()))
+			new File(System.getenv("APPDATA")+"//CollegeConnect").mkdir();
+		if(!(new File(absolutePath).exists()))
+			new File(absolutePath).mkdir();
+		if(!personIdFile.exists())
+			personIdFile.createNewFile();
+		if(!clubIdFile.exists())
+			clubIdFile.createNewFile();
+		if(!(new File(absolutePath+"//profiles").exists()))
+			new File(absolutePath+"//profiles").mkdir();
+		if(!(new File(absolutePath+"//clubs").exists()))
+			new File(absolutePath+"//clubs").mkdir();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
 
 }
