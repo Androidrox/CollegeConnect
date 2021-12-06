@@ -1,0 +1,10 @@
+name:Cybersecurity Club
+numMembers:120
+location:Ullrich
+meetingTime: 7:00pm Monday
+fees:$0
+description:The Best Club
+president:Joe
+presPhone: 111-222-3333
+presEmail:Joe
+keywords:hacking/computer/programming/cybersecurity/cyber/fun

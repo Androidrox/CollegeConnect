@@ -1,0 +1,10 @@
+name:Soccer Club
+numMembers:30
+location:Soccer Field
+meetingTime: 4:00pm Tuesdays and Thursdays
+fees:$0
+description:Club for people that enjoy soccer to play soccer
+president:Billy Bob
+presPhone: 111-222-3333
+presEmail:BillyBob@fakeemail.com
+keywords:soccer/fun/athletic/sports

@@ -1,0 +1,14 @@
+
+name:Test1
+
+username:Test1
+
+password:Test1
+
+yearInSchool:Freshman
+
+gender:Male
+
+age:18
+
+email:test1

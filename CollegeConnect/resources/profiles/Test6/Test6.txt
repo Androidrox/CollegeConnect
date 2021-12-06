@@ -1,0 +1,14 @@
+
+name:Test6
+
+username:Test6
+
+password:Test6
+
+yearInSchool:Test6
+
+gender:Female
+
+age:60
+
+email:Test6

@@ -309,13 +309,13 @@ public class Runner {
 			String gender = input.nextLine();
 			Gender genderEnum = null;
 			try {
-				genderEnum = Gender.valueOf(gender.toLowerCase());
+				genderEnum = Gender.valueOf(gender);
 			}catch(Exception e) {
 				System.out.println("Not a valid option for gender, Use male, female, or other.");
 				return;
 			}
 			if(genderEnum != null)
-				genderEnum = Gender.valueOf(gender.toLowerCase());
+				genderEnum = Gender.valueOf(gender);
 			lines.add("gender:" + profile.getGender());
 
 			/*
@@ -494,14 +494,14 @@ public class Runner {
 		String gender = input.nextLine();
 		Gender genderEnum = null;
 		try {
-			genderEnum = Gender.valueOf(gender.toLowerCase());
+			genderEnum = Gender.valueOf(gender);
 		}catch(Exception e) {
 			System.out.println("Not a valid option for gender, Use male, female, or other.");
 			System.out.println("TERMINATING PROGRAM.  INCORRECT ANSWER.");
 			System.exit(0);
 		}
 		if(genderEnum != null)
-			genderEnum = Gender.valueOf(gender.toLowerCase());
+			genderEnum = Gender.valueOf(gender);
 		System.out.print("Enter an age:  ");
 		String age = input.nextLine();
 		while(!(age.matches("[0-9]+") && age.length() == 2)) {
@@ -535,7 +535,7 @@ public class Runner {
 			choice = scan.nextLine();
 			for(int i = 0; i < FileIO.getProfiles().size(); i++) {
 				if(choice.equals(FileIO.getProfiles().get(i).getName())) {
-					FileIO.getMessage(FileIO.getProfiles().get(loggedIn), FileIO.getProfiles().get(i));
+					FileIO.displayMessages(FileIO.getProfiles().get(loggedIn), FileIO.getProfiles().get(i));
 					System.out.println("\nWould you like to send the viewer a new message (y/n)");
 					choice = scan.nextLine();
 					if(choice.equalsIgnoreCase("y")){

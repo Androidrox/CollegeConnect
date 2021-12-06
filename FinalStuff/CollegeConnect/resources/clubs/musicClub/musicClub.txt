@@ -1,0 +1,10 @@
+name:Music Club
+numMembers:30
+location:Doudna Hall
+meetingTime: 4:00pm Tuesdays and Thursdays
+fees:$0
+description:Club for people that like Music
+president:Billy Bob
+presPhone: 111-222-3333
+presEmail:BillyBob@fakeemail.com
+keywords:music/fun/guitar/piano/band/orchestra/drums
